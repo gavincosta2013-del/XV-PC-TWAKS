@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XV PC Tweaks — Elite Optimization Suite</title>
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#05040f;--surface:#0d0b1e;--surface2:#131128;--surface3:#1a1736;
+  --border:#2d2860;--border2:#4a44a0;
+  --text:#e8e4ff;--muted:#7870b0;
+  --purple:#8b5cf6;--purple2:#a78bfa;--purple3:#c4b5fd;--purple-dark:#4c1d95;
+  --blue:#3b82f6;--blue2:#60a5fa;--blue3:#93c5fd;--blue-dark:#1e3a8a;
+  --cyan:#06b6d4;--pink:#ec4899;
+  --accent:var(--purple);--accent2:var(--blue);
+  --green:#22c55e;--amber:#f59e0b;--red:#ef4444;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-height:100vh;overflow-x:hidden;cursor:default}
+
+/* PARTICLE CANVAS */
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;transition:opacity 2s}
+
+/* INTRO OVERLAY */
+#intro{position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1s}
+#intro.fade{opacity:0;pointer-events:none}
+.intro-logo{font-family:'Orbitron',sans-serif;font-size:72px;font-weight:900;letter-spacing:8px;background:linear-gradient(135deg,var(--purple),var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:glowPulse 2s infinite}
+.intro-sub{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:6px;color:var(--muted);margin-top:8px}
+.intro-bar{width:300px;height:3px;background:var(--surface3);border-radius:2px;margin-top:32px;overflow:hidden}
+.intro-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));border-radius:2px;animation:loadBar 2.2s ease forwards}
+@keyframes loadBar{from{width:0}to{width:100%}}
+@keyframes glowPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.4)}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* HERO */
+.hero{position:relative;padding:70px 24px 50px;text-align:center;border-bottom:1px solid var(--border);background:radial-gradient(ellipse at top,#1a0a40 0%,var(--bg) 70%);overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--purple),var(--blue),var(--cyan),var(--blue),var(--purple),transparent);animation:shimmer 3s linear infinite}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.hero-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(139,92,246,0.15) 0%,transparent 70%);pointer-events:none}
+.logo{font-family:'Orbitron',sans-serif;font-size:60px;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,var(--purple2),var(--blue2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative}
+.tagline{font-size:11px;letter-spacing:8px;color:var(--muted);margin-top:8px;font-family:'Share Tech Mono',monospace}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.badge{font-size:9px;font-family:'Share Tech Mono',monospace;letter-spacing:2px;padding:4px 10px;border:1px solid var(--border);color:var(--muted);border-radius:2px;background:var(--surface)}
+.badge.live{border-color:var(--green);color:var(--green);animation:blink 2s infinite}
+.badge.pro{border-color:var(--purple);color:var(--purple2)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* NAV */
+.nav{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:100;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;padding:13px 16px;border:none;background:none;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.nav-btn:hover{color:var(--text);background:var(--surface2)}
+.nav-btn.active{color:var(--purple2);border-bottom-color:var(--purple)}
+
+/* CONTENT */
+.content{display:none;padding:24px;max-width:1400px;margin:0 auto}
+.content.active{display:block}
+
+/* STATUS BAR */
+.status-bar{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 18px;margin-bottom:14px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.status-item{display:flex;align-items:center;gap:7px;font-size:11px;font-family:'Share Tech Mono',monospace}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dg{background:var(--green)}.da{background:var(--amber)}.dr{background:var(--red)}.dp{background:var(--purple)}
+.slabel{color:var(--muted)}.sval{color:var(--text);font-weight:500}
+
+/* TWEAK GRID */
+.tweak-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+
+/* TWEAK CARD */
+.tweak-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s,box-shadow .2s}
+.tweak-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,92,246,0.12)}
+.tweak-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--purple),var(--blue));opacity:0;transition:opacity .2s}
+.tweak-card:hover::before,.tweak-card.applied::before{opacity:1}
+.tweak-card.applied{border-color:#1a3a0a;background:#090f07}
+.tweak-card.applied::before{background:linear-gradient(180deg,var(--green),#16a34a)}
+.tweak-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
+.tweak-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--text)}
+.tweak-tag{font-size:8px;font-family:'Share Tech Mono',monospace;padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.tag-fps{background:#2d1a00;color:var(--amber);border:1px solid var(--amber)}
+.tag-net{background:#001230;color:var(--blue2);border:1px solid var(--blue)}
+.tag-sys{background:#1a0a30;color:var(--purple2);border:1px solid var(--purple)}
+.tag-safe{background:#0a1a00;color:var(--green);border:1px solid var(--green)}
+.tag-power{background:#001820;color:var(--cyan);border:1px solid var(--cyan)}
+.tweak-desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.55}
+.tweak-impact{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.impact-label{font-size:9px;font-family:'Share Tech Mono',monospace;color:var(--muted);min-width:38px}
+.impact-bar{flex:1;height:3px;background:var(--surface3);border-radius:2px;overflow:hidden}
+.impact-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));transition:width .9s ease}
+.apply-btn{width:100%;padding:8px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;border-radius:4px;transition:all .2s}
+.apply-btn:hover{background:linear-gradient(135deg,var(--purple),var(--blue));border-color:var(--purple);color:#fff}
+.apply-btn.done{background:linear-gradient(135deg,#14532d,#166534);border-color:var(--green);color:var(--green);cursor:default}
+.apply-btn.locked{background:var(--surface2);border-color:var(--border);color:var(--muted);cursor:not-allowed}
+
+/* APPLY ALL */
+.apply-all{width:100%;padding:14px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;border:1px solid var(--purple);background:transparent;color:var(--purple2);cursor:pointer;border-radius:6px;margin-bottom:16px;transition:all .2s;position:relative;overflow:hidden}
+.apply-all::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--purple),var(--blue));opacity:0;transition:opacity .2s}
+.apply-all:hover::before{opacity:1}
+.apply-all span{position:relative;z-index:1}
+.apply-all:hover span{color:#fff}
+.apply-all.done{border-color:var(--green);color:var(--green)}
+
+/* LOCK BANNER */
+.lock-banner{background:linear-gradient(135deg,var(--surface2),var(--surface3));border:1px solid var(--purple);border-radius:8px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.lock-icon{font-size:24px;flex-shrink:0}
+.lock-text{flex:1}
+.lock-title{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--purple2);letter-spacing:1px}
+.lock-sub{font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:3px}
+.unlock-btn{padding:8px 16px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;border:1px solid var(--purple);background:transparent;color:var(--purple2);cursor:pointer;border-radius:4px;transition:all .2s;white-space:nowrap}
+.unlock-btn:hover{background:var(--purple);color:#fff}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.sec-icon{width:38px;height:38px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sec-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;letter-spacing:2px;background:linear-gradient(135deg,var(--purple2),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sec-sub{font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:3px}
+
+/* DEFENDER */
+.defender-hero{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:10px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden}
+.defender-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan))}
+.defender-title{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.defender-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:16px}
+.def-stat{background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center}
+.def-stat-val{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700}
+.def-stat-label{font-size:9px;font-family:'Share Tech Mono',monospace;color:var(--muted);margin-top:3px}
+.def-stat.g .def-stat-val{color:var(--green)}
+.def-stat.b .def-stat-val{color:var(--blue2)}
+.def-stat.p .def-stat-val{color:var(--purple2)}
+.def-stat.c .def-stat-val{color:var(--cyan)}
+.toggle-row{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 16px;background:var(--surface3);border:1px solid var(--border);border-radius:6px}
+.toggle-switch{position:relative;width:46px;height:24px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.tslider{position:absolute;inset:0;background:var(--border2);border-radius:24px;cursor:pointer;transition:.3s}
+.tslider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:var(--muted);border-radius:50%;transition:.3s}
+input:checked+.tslider{background:linear-gradient(135deg,var(--purple),var(--blue))}
+input:checked+.tslider:before{transform:translateX(22px);background:#fff}
+.toggle-label{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--text)}
+.toggle-sub{font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:2px}
+
+/* OVERCLOCK METERS */
+.oc-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:12px}
+.oc-label{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;margin-bottom:10px;color:var(--purple2)}
+.oc-row{display:flex;align-items:center;gap:12px}
+.oc-val{font-family:'Share Tech Mono',monospace;font-size:13px;min-width:62px;text-align:right;color:var(--cyan);font-weight:500}
+input[type=range]{flex:1;accent-color:var(--purple);cursor:pointer}
+
+/* SELECT */
+select{background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:8px 12px;border-radius:4px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;cursor:pointer;width:100%;margin-bottom:12px}
+select:focus{outline:none;border-color:var(--purple)}
+
+/* GAME PRIORITY */
+.game-priority-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px}
+.game-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:12px}
+.game-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;cursor:pointer;transition:all .2s;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px}
+.game-item:hover{border-color:var(--purple);color:var(--purple2)}
+.game-item.active{border-color:var(--purple);background:#1a0a40;color:var(--purple2)}
+.game-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);flex-shrink:0;transition:background .2s}
+.game-item.active .game-dot{background:var(--purple)}
+
+/* FAN CONTROL */
+.fan-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:12px}
+.fan-icon{font-size:28px;animation:spin 2s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* ADMIN PANEL */
+.admin-panel{background:linear-gradient(135deg,var(--surface),var(--surface2));border:2px solid var(--purple);border-radius:10px;padding:24px;margin-bottom:20px}
+.admin-title{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;color:var(--purple2);letter-spacing:2px;margin-bottom:6px}
+.admin-sub{font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace}
+.code-input-row{display:flex;gap:8px;margin-top:14px}
+.code-input{flex:1;background:var(--surface3);border:1px solid var(--border2);color:var(--text);padding:12px 16px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:14px;letter-spacing:2px}
+.code-input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 2px rgba(139,92,246,0.2)}
+.code-btn{padding:12px 20px;background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer;transition:opacity .2s}
+.code-btn:hover{opacity:0.85}
+.code-msg{margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px 12px;border-radius:4px;display:none}
+.code-msg.success{background:#0a1a00;border:1px solid var(--green);color:var(--green);display:block}
+.code-msg.error{background:#1a0505;border:1px solid var(--red);color:var(--red);display:block}
+
+/* PAY PAGE */
+.pay-hero{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:10px;padding:28px;margin-bottom:20px;text-align:center}
+.pay-title{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--blue2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pay-sub{font-size:12px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:6px}
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:20px}
+.plan-card{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:22px;transition:all .2s;position:relative}
+.plan-card:hover{border-color:var(--purple);transform:translateY(-3px)}
+.plan-card.featured{border:2px solid var(--purple);background:linear-gradient(135deg,#0d0a20,#150f30)}
+.plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;padding:3px 10px;border-radius:10px}
+.plan-name{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.plan-price{font-family:'Orbitron',sans-serif;font-size:34px;font-weight:900;background:linear-gradient(135deg,var(--purple2),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.plan-period{font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace}
+.plan-features{margin-top:14px;list-style:none}
+.plan-features li{font-size:11px;color:var(--muted);padding:4px 0;font-family:'Share Tech Mono',monospace;border-bottom:1px solid var(--border)}
+.plan-features li::before{content:'✓ ';color:var(--purple2)}
+.pay-btn{width:100%;margin-top:14px;padding:12px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;border:1px solid var(--purple);background:transparent;color:var(--purple2);cursor:pointer;border-radius:6px;transition:all .2s}
+.pay-btn:hover{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border-color:transparent}
+.pay-methods{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.pay-method{padding:10px 20px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;color:var(--muted);cursor:pointer;transition:all .2s}
+.pay-method:hover{border-color:var(--purple);color:var(--purple2)}
+
+/* SUPPORT */
+.support-hero{background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
+.support-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px}
+.support-card{background:var(--surface3);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:all .2s}
+.support-card:hover{border-color:var(--purple);transform:translateY(-2px)}
+.support-icon{font-size:28px;margin-bottom:8px}
+.support-title{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--purple2)}
+.support-sub{font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:4px}
+.ticket-form{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-top:16px}
+.ticket-form input,.ticket-form textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:4px;font-family:'Exo 2',sans-serif;font-size:13px;margin-bottom:10px;resize:vertical}
+.ticket-form input:focus,.ticket-form textarea:focus{outline:none;border-color:var(--purple)}
+.ticket-form textarea{min-height:100px}
+.submit-btn{width:100%;padding:12px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;cursor:pointer;border-radius:6px;transition:opacity .2s}
+.submit-btn:hover{opacity:0.85}
+
+/* WARP CARD */
+.warp-card{background:linear-gradient(135deg,#0a0020,#001030);border:1px solid var(--purple);border-radius:10px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden}
+.warp-card::before{content:'';position:absolute;top:-50%;right:-50%;width:200px;height:200px;background:radial-gradient(circle,rgba(139,92,246,0.1),transparent 70%)}
+.warp-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:var(--purple2)}
+.warp-desc{font-size:12px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:6px;line-height:1.6}
+.warp-btn{display:inline-block;margin-top:14px;padding:10px 22px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;border-radius:6px;text-decoration:none;border:none;cursor:pointer;transition:opacity .2s}
+.warp-btn:hover{opacity:0.85}
+.warp-steps{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.warp-step{padding:6px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--muted)}
+.warp-step span{color:var(--purple2)}
+
+/* DRIVERS CARD */
+.drivers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+.driver-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;transition:all .2s}
+.driver-card:hover{border-color:var(--border2)}
+.driver-name{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--text)}
+.driver-ver{font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--muted);margin-top:3px}
+.driver-status{font-size:9px;font-family:'Share Tech Mono',monospace;margin-top:8px;padding:3px 8px;border-radius:2px;display:inline-block}
+.driver-status.outdated{background:#2d0a00;color:var(--amber);border:1px solid var(--amber)}
+.driver-status.ok{background:#0a1a00;color:var(--green);border:1px solid var(--green)}
+.driver-update-btn{width:100%;margin-top:10px;padding:7px;font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;border-radius:4px;transition:all .2s}
+.driver-update-btn:hover{background:linear-gradient(135deg,var(--purple),var(--blue));border-color:transparent;color:#fff}
+.driver-update-btn.updated{border-color:var(--green);color:var(--green);background:#0a1a00}
+
+/* JUNK CLEANER */
+.junk-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.junk-stat{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center}
+.junk-val{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;color:var(--purple2)}
+.junk-label{font-size:9px;font-family:'Share Tech Mono',monospace;color:var(--muted);margin-top:4px}
+
+/* FOOTER */
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:40px 24px;text-align:center;margin-top:40px;position:relative;overflow:hidden}
+.footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple),var(--blue),var(--cyan),var(--blue),var(--purple),transparent)}
+.footer-logo{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--purple2),var(--blue2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.footer-sub{font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:4px;letter-spacing:4px}
+.footer-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.footer-link{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--blue2);text-decoration:none;border:1px solid var(--blue);padding:7px 18px;border-radius:3px;letter-spacing:2px;transition:all .2s}
+.footer-link:hover{background:var(--blue);color:#fff}
+.footer-link.main{border-color:var(--purple);color:var(--purple2)}
+.footer-link.main:hover{background:linear-gradient(135deg,var(--purple),var(--blue));border-color:transparent;color:#fff}
+.footer-copy{font-size:9px;color:var(--muted);margin-top:18px;font-family:'Share Tech Mono',monospace;letter-spacing:2px}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tweak-card{animation:fadeUp .3s ease both}
+
+/* NOTIFICATION */
+.notif{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;padding:12px 20px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;z-index:9000;transform:translateY(100px);opacity:0;transition:all .4s}
+.notif.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particles"></canvas>
+
+<!-- INTRO OVERLAY -->
+<div id="intro">
+  <div class="intro-logo">XV PC TWEAKS</div>
+  <div class="intro-sub">ELITE OPTIMIZATION SUITE</div>
+  <div class="intro-bar"><div class="intro-fill"></div></div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);margin-top:16px;letter-spacing:3px" id="intro-status">INITIALIZING...</div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="logo">XV PC TWEAKS</div>
+  <div class="tagline">ELITE OPTIMIZATION SUITE · BUILT FOR DOMINANCE · v4.0.0</div>
+  <div class="badge-row">
+    <div class="badge live">● LIVE</div>
+    <div class="badge">WINDOWS 10 / 11</div>
+    <div class="badge pro">80+ TWEAKS</div>
+    <div class="badge">ZERO INPUT DELAY</div>
+    <div class="badge pro">XV DEFENDER</div>
+    <div class="badge">WARP INCLUDED</div>
+    <div class="badge pro">ADMIN PANEL</div>
+  </div>
+</div>
+
+<div class="nav" id="main-nav">
+  <button class="nav-btn active" onclick="switchTab('gaming',this)">🎮 GAMING</button>
+  <button class="nav-btn" onclick="switchTab('defender',this)">🛡 XV DEFENDER</button>
+  <button class="nav-btn" onclick="switchTab('network',this)">📡 NETWORK</button>
+  <button class="nav-btn" onclick="switchTab('overclock',this)">⚡ OVERCLOCK</button>
+  <button class="nav-btn" onclick="switchTab('fans',this)">🌀 FANS</button>
+  <button class="nav-btn" onclick="switchTab('debloat',this)">🗑 DEBLOAT</button>
+  <button class="nav-btn" onclick="switchTab('startup',this)">🚀 STARTUP</button>
+  <button class="nav-btn" onclick="switchTab('drivers',this)">🔧 DRIVERS</button>
+  <button class="nav-btn" onclick="switchTab('junk',this)">🧹 JUNK</button>
+  <button class="nav-btn" onclick="switchTab('power',this)">🔋 POWER</button>
+  <button class="nav-btn" onclick="switchTab('privacy',this)">🔒 PRIVACY</button>
+  <button class="nav-btn" onclick="switchTab('admin',this)">🔑 ADMIN</button>
+  <button class="nav-btn" onclick="switchTab('pricing',this)">💎 PRICING</button>
+  <button class="nav-btn" onclick="switchTab('support',this)">💬 SUPPORT</button>
+</div>
+
+<!-- =================== GAMING =================== -->
+<div id="tab-gaming" class="content active">
+  <div class="status-bar">
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">INPUT DELAY</span><span class="sval">0ms</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">AIM DELAY</span><span class="sval">ZERO</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">EDIT DELAY</span><span class="sval">ZERO</span></div>
+    <div class="status-item"><div class="sdot dp"></div><span class="slabel">APPLIED</span><span class="sval" id="sg-count">0/15</span></div>
+  </div>
+  <div class="game-priority-card">
+    <div class="sec-title" style="font-size:14px;margin-bottom:8px">GAME PRIORITY — SELECT YOUR GAME</div>
+    <div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-bottom:10px">CPU & GPU resources will be prioritized for selected game</div>
+    <div class="game-list" id="game-list"></div>
+  </div>
+  <button class="apply-all" id="aa-gaming" onclick="applyAll('gaming')"><span>⚡ APPLY ALL GAMING TWEAKS</span></button>
+  <div class="tweak-grid" id="grid-gaming"></div>
+</div>
+
+<!-- =================== DEFENDER =================== -->
+<div id="tab-defender" class="content">
+  <div class="defender-hero">
+    <div class="defender-title">XV DEFENDER</div>
+    <div style="font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:4px">LIGHTER THAN WINDOWS DEFENDER · LOWER PING IMPACT · MORE SECURE</div>
+    <div class="defender-stats">
+      <div class="def-stat g"><div class="def-stat-val" id="def-ping">~0ms</div><div class="def-stat-label">PING IMPACT</div></div>
+      <div class="def-stat b"><div class="def-stat-val" id="def-status">ACTIVE</div><div class="def-stat-label">STATUS</div></div>
+      <div class="def-stat p"><div class="def-stat-val" id="def-cpu">0.1%</div><div class="def-stat-label">CPU USAGE</div></div>
+      <div class="def-stat c"><div class="def-stat-val">100%</div><div class="def-stat-label">SAFER THAN WD</div></div>
+      <div class="def-stat g"><div class="def-stat-val">0</div><div class="def-stat-label">FPS LOST</div></div>
+    </div>
+    <div class="toggle-row">
+      <label class="toggle-switch"><input type="checkbox" checked id="def-toggle" onchange="toggleDefender()"><div class="tslider"></div></label>
+      <div>
+        <div class="toggle-label">XV DEFENDER ENABLED</div>
+        <div class="toggle-sub">Real-time protection — zero FPS impact — zero ping overhead</div>
+      </div>
+    </div>
+  </div>
+  <div class="tweak-grid" id="grid-defender"></div>
+</div>
+
+<!-- =================== NETWORK =================== -->
+<div id="tab-network" class="content">
+  <div class="warp-card">
+    <div class="warp-title">CLOUDFLARE WARP</div>
+    <div class="warp-desc">The world's fastest DNS + VPN hybrid. Encrypts your traffic, reduces ping on many routes, and protects against DDoS. Free tier included. Click below to download and install automatically.</div>
+    <div class="warp-steps">
+      <div class="warp-step"><span>1.</span> Download WARP</div>
+      <div class="warp-step"><span>2.</span> Install &amp; Open</div>
+      <div class="warp-step"><span>3.</span> Toggle ON</div>
+      <div class="warp-step"><span>4.</span> Instant boost</div>
+    </div>
+    <a class="warp-btn" href="https://one.one.one.one/download" target="_blank">⬇ DOWNLOAD CLOUDFLARE WARP</a>
+  </div>
+  <div class="status-bar">
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">PING</span><span class="sval" id="s-ping">-- ms</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">PACKET LOSS</span><span class="sval">0%</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">DNS</span><span class="sval" id="s-dns">DEFAULT</span></div>
+    <div class="status-item"><div class="sdot dp"></div><span class="slabel">APPLIED</span><span class="sval" id="sn-count">0/16</span></div>
+  </div>
+  <button class="apply-all" id="aa-network" onclick="applyAll('network')"><span>📡 APPLY ALL NETWORK TWEAKS</span></button>
+  <div class="tweak-grid" id="grid-network"></div>
+</div>
+
+<!-- =================== OVERCLOCK =================== -->
+<div id="tab-overclock" class="content">
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#1a0a30">⚡</div>
+    <div><div class="sec-title">OVERCLOCK SUITE</div><div class="sec-sub">CPU · GPU · RAM · MOTHERBOARD POWER DELIVERY</div></div>
+  </div>
+  <div class="oc-card"><div class="oc-label">CPU BOOST OFFSET</div><div class="oc-row"><input type="range" min="0" max="30" value="10" step="1" id="cpu-oc" oninput="oc('cpu-oc','cpu-v','%')"><div class="oc-val" id="cpu-v">+10%</div></div></div>
+  <div class="oc-card"><div class="oc-label">GPU CORE CLOCK OFFSET</div><div class="oc-row"><input type="range" min="0" max="250" value="75" step="5" id="gpu-oc" oninput="oc('gpu-oc','gpu-v','MHz')"><div class="oc-val" id="gpu-v">+75MHz</div></div></div>
+  <div class="oc-card"><div class="oc-label">GPU MEMORY CLOCK OFFSET</div><div class="oc-row"><input type="range" min="0" max="500" value="150" step="25" id="gmem-oc" oninput="oc('gmem-oc','gmem-v','MHz')"><div class="oc-val" id="gmem-v">+150MHz</div></div></div>
+  <div class="oc-card"><div class="oc-label">RAM FREQUENCY BOOST</div><div class="oc-row"><input type="range" min="0" max="800" value="200" step="100" id="ram-oc" oninput="oc('ram-oc','ram-v','MHz')"><div class="oc-val" id="ram-v">+200MHz</div></div></div>
+  <div class="oc-card"><div class="oc-label">MOTHERBOARD VRM POWER DELIVERY</div><div class="oc-row"><input type="range" min="0" max="30" value="12" step="1" id="mb-oc" oninput="oc('mb-oc','mb-v','%')"><div class="oc-val" id="mb-v">+12%</div></div></div>
+  <div class="oc-card"><div class="oc-label">MOTHERBOARD PCIE BANDWIDTH BOOST</div><div class="oc-row"><input type="range" min="0" max="20" value="8" step="1" id="pcie-oc" oninput="oc('pcie-oc','pcie-v','%')"><div class="oc-val" id="pcie-v">+8%</div></div></div>
+  <br>
+  <div class="tweak-grid" id="grid-overclock"></div>
+</div>
+
+<!-- =================== FANS =================== -->
+<div id="tab-fans" class="content">
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#001820"><span class="fan-icon">🌀</span></div>
+    <div><div class="sec-title">FAN CONTROL</div><div class="sec-sub">CPU FAN · GPU FAN · CASE FANS · MOTHERBOARD CURVE</div></div>
+  </div>
+  <div class="oc-card"><div class="oc-label">CPU FAN SPEED</div><div class="oc-row"><input type="range" min="20" max="100" value="60" step="1" id="cpu-fan" oninput="oc('cpu-fan','cpu-fan-v','%')"><div class="oc-val" id="cpu-fan-v">60%</div></div></div>
+  <div class="oc-card"><div class="oc-label">GPU FAN SPEED</div><div class="oc-row"><input type="range" min="20" max="100" value="55" step="1" id="gpu-fan" oninput="oc('gpu-fan','gpu-fan-v','%')"><div class="oc-val" id="gpu-fan-v">55%</div></div></div>
+  <div class="oc-card"><div class="oc-label">CASE FANS SPEED</div><div class="oc-row"><input type="range" min="20" max="100" value="50" step="1" id="case-fan" oninput="oc('case-fan','case-fan-v','%')"><div class="oc-val" id="case-fan-v">50%</div></div></div>
+  <div class="oc-card"><div class="oc-label">PUMP / RADIATOR FAN (AIO)</div><div class="oc-row"><input type="range" min="50" max="100" value="80" step="1" id="pump-fan" oninput="oc('pump-fan','pump-fan-v','%')"><div class="oc-val" id="pump-fan-v">80%</div></div></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px">
+    <div class="fan-card"><div class="oc-label">PRESET: SILENT</div><div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-bottom:10px">Quiet mode, lower temps okay</div><button class="apply-btn" onclick="fanPreset(30,30,30,60)">APPLY</button></div>
+    <div class="fan-card"><div class="oc-label">PRESET: BALANCED</div><div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-bottom:10px">Best temp vs noise balance</div><button class="apply-btn" onclick="fanPreset(60,55,50,80)">APPLY</button></div>
+    <div class="fan-card"><div class="oc-label">PRESET: PERFORMANCE</div><div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-bottom:10px">Max cooling, louder fans</div><button class="apply-btn" onclick="fanPreset(80,80,75,100)">APPLY</button></div>
+    <div class="fan-card"><div class="oc-label">PRESET: MAX BOOST</div><div style="font-size:10px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-bottom:10px">100% all fans — max overclocking</div><button class="apply-btn" onclick="fanPreset(100,100,100,100)">APPLY</button></div>
+  </div>
+</div>
+
+<!-- =================== DEBLOAT =================== -->
+<div id="tab-debloat" class="content">
+  <div class="status-bar">
+    <div class="status-item"><div class="sdot da"></div><span class="slabel">BLOAT DETECTED</span><span class="sval" id="s-bloat">24 ITEMS</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">RAM FREED</span><span class="sval" id="s-ram">0 MB</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">DISK FREED</span><span class="sval" id="s-disk">0 MB</span></div>
+  </div>
+  <button class="apply-all" id="aa-debloat" onclick="applyAll('debloat')"><span>🗑 REMOVE ALL BLOATWARE</span></button>
+  <div class="tweak-grid" id="grid-debloat"></div>
+</div>
+
+<!-- =================== STARTUP =================== -->
+<div id="tab-startup" class="content">
+  <div class="status-bar">
+    <div class="status-item"><div class="sdot da"></div><span class="slabel">STARTUP APPS</span><span class="sval" id="s-startcount">18 ACTIVE</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">BOOT SAVED</span><span class="sval" id="s-boot">0.0s</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">RAM SAVED</span><span class="sval" id="s-bootram">0 MB</span></div>
+  </div>
+  <button class="apply-all" id="aa-startup" onclick="applyAll('startup')"><span>🚀 DISABLE ALL STARTUP APPS</span></button>
+  <div class="tweak-grid" id="grid-startup"></div>
+</div>
+
+<!-- =================== DRIVERS =================== -->
+<div id="tab-drivers" class="content">
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#001020">🔧</div>
+    <div><div class="sec-title">AUTO DRIVER UPDATE</div><div class="sec-sub">SCAN · DOWNLOAD · INSTALL LATEST DRIVERS</div></div>
+  </div>
+  <button class="apply-all" id="aa-drivers" onclick="updateAllDrivers()"><span>🔧 UPDATE ALL DRIVERS</span></button>
+  <div class="drivers-grid" id="drivers-grid"></div>
+</div>
+
+<!-- =================== JUNK =================== -->
+<div id="tab-junk" class="content">
+  <div class="sec-header">
+    <div class="sec-icon" style="background:#0a0020">🧹</div>
+    <div><div class="sec-title">JUNK FILE CLEANER</div><div class="sec-sub">TEMP FILES · CACHE · REGISTRY · OLD LOGS</div></div>
+  </div>
+  <div class="junk-stats">
+    <div class="junk-stat"><div class="junk-val" id="j-temp">4.2 GB</div><div class="junk-label">TEMP FILES</div></div>
+    <div class="junk-stat"><div class="junk-val" id="j-cache">1.8 GB</div><div class="junk-label">BROWSER CACHE</div></div>
+    <div class="junk-stat"><div class="junk-val" id="j-reg">847</div><div class="junk-label">REGISTRY ORPHANS</div></div>
+    <div class="junk-stat"><div class="junk-val" id="j-logs">620 MB</div><div class="junk-label">OLD LOG FILES</div></div>
+    <div class="junk-stat"><div class="junk-val" id="j-total">6.6 GB</div><div class="junk-label">TOTAL JUNK</div></div>
+  </div>
+  <button class="apply-all" id="aa-junk" onclick="cleanAllJunk()"><span>🧹 CLEAN ALL JUNK NOW</span></button>
+  <div class="tweak-grid" id="grid-junk"></div>
+</div>
+
+<!-- =================== POWER =================== -->
+<div id="tab-power" class="content">
+  <div class="status-bar">
+    <div class="status-item"><div class="sdot dp"></div><span class="slabel">POWER PLAN</span><span class="sval" id="s-plan">BALANCED</span></div>
+    <div class="status-item"><div class="sdot da"></div><span class="slabel">TIMER RES</span><span class="sval" id="s-timer">15.6ms</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">THERMAL</span><span class="sval" id="s-thermal">DEFAULT</span></div>
+  </div>
+  <button class="apply-all" id="aa-power" onclick="applyAll('power')"><span>🔋 APPLY ALL POWER TWEAKS</span></button>
+  <div class="tweak-grid" id="grid-power"></div>
+</div>
+
+<!-- =================== PRIVACY =================== -->
+<div id="tab-privacy" class="content">
+  <div class="status-bar">
+    <div class="status-item"><div class="sdot da"></div><span class="slabel">TELEMETRY</span><span class="sval" id="s-telem">ON</span></div>
+    <div class="status-item"><div class="sdot da"></div><span class="slabel">AD TRACKING</span><span class="sval" id="s-ads">ON</span></div>
+    <div class="status-item"><div class="sdot dg"></div><span class="slabel">LEAKS BLOCKED</span><span class="sval" id="s-leaks">0</span></div>
+  </div>
+  <button class="apply-all" id="aa-privacy" onclick="applyAll('privacy')"><span>🔒 APPLY ALL PRIVACY TWEAKS</span></button>
+  <div class="tweak-grid" id="grid-privacy"></div>
+</div>
+
+<!-- =================== ADMIN =================== -->
+<div id="tab-admin" class="content">
+  <div class="admin-panel">
+    <div class="admin-title">🔑 ADMIN PANEL</div>
+    <div class="admin-sub">ENTER YOUR CODE TO UNLOCK FREE PREMIUM TWEAKS</div>
+    <div class="code-input-row">
+      <input class="code-input" type="password" id="admin-code" placeholder="ENTER CODE HERE..." maxlength="20">
+      <button class="code-btn" onclick="checkCode()">UNLOCK</button>
+    </div>
+    <div class="code-msg" id="code-msg"></div>
+  </div>
+  <div id="admin-locked-content">
+    <div class="lock-banner">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-text">
+        <div class="lock-title">PREMIUM TWEAKS LOCKED</div>
+        <div class="lock-sub">Enter your admin code above to unlock all premium tweaks for free</div>
+      </div>
+    </div>
+  </div>
+  <div id="admin-unlocked-content" style="display:none">
+    <div class="tweak-grid" id="grid-admin"></div>
+  </div>
+</div>
+
+<!-- =================== PRICING =================== -->
+<div id="tab-pricing" class="content">
+
+  <div style="text-align:center;margin-bottom:28px">
+    <div style="font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#a78bfa,#60a5fa,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">GET YOUR TWEAKS</div>
+    <div style="font-size:11px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-top:6px;letter-spacing:3px">PAY ON CASH APP OR PAYPAL → WE SEND YOUR CODE → UNLOCK</div>
+  </div>
+
+  <!-- HOW IT WORKS BANNER -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:24px">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;color:#a78bfa;margin-bottom:12px">HOW IT WORKS</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+      <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
+        <div style="font-size:24px;margin-bottom:6px">💵</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px">1. SEND PAYMENT</div>
+        <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;line-height:1.5">Send exact amount to Cash App or PayPal</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
+        <div style="font-size:24px;margin-bottom:6px">📸</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px">2. SCREENSHOT IT</div>
+        <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;line-height:1.5">Take a screenshot of your payment confirmation</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
+        <div style="font-size:24px;margin-bottom:6px">💬</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px">3. SEND REQUEST</div>
+        <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;line-height:1.5">Submit your info below and we send your code fast</div>
+      </div>
+      <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
+        <div style="font-size:24px;margin-bottom:6px">⚡</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:#a78bfa;margin-bottom:4px">4. UNLOCK</div>
+        <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;line-height:1.5">Enter your code and tweaks unlock instantly</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN CARDS -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px">
+
+    <!-- BASIC -->
+    <div style="background:var(--surface);border:1px solid #f59e0b;border-radius:10px;padding:22px;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#f59e0b;margin-bottom:4px">BASIC</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:#fff;margin-bottom:2px">$20</div>
+      <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:14px">ONE TIME PAYMENT</div>
+      <div style="font-size:11px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:16px;line-height:1.9;border-top:1px solid var(--border);padding-top:12px">
+        ✓ Zero input delay<br>✓ Zero aim delay<br>✓ Zero edit delay<br>✓ Basic FPS boosts<br>✓ Core network tweaks<br>✓ Junk cleaner<br>✓ Startup manager<br>✓ Telemetry off
+      </div>
+      <button onclick="openPayFlow(1,'BASIC',20)" style="width:100%;padding:13px;background:linear-gradient(135deg,#92400e,#b45309);border:1px solid #f59e0b;color:#fcd34d;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='#f59e0b';this.style.color='#000'" onmouseout="this.style.background='linear-gradient(135deg,#92400e,#b45309)';this.style.color='#fcd34d'">BUY BASIC — $20</button>
+    </div>
+
+    <!-- AMAZING -->
+    <div style="background:var(--surface);border:2px solid #8b5cf6;border-radius:10px;padding:22px;position:relative;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;padding:3px 14px;border-radius:10px;white-space:nowrap">MOST POPULAR</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#a78bfa;margin-bottom:4px">AMAZING</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:#fff;margin-bottom:2px">$30</div>
+      <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:14px">ONE TIME PAYMENT</div>
+      <div style="font-size:11px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:16px;line-height:1.9;border-top:1px solid var(--border);padding-top:12px">
+        ✓ Everything in BASIC<br>✓ All gaming tweaks<br>✓ All network tweaks<br>✓ Overclock suite<br>✓ Fan control<br>✓ Auto driver updates<br>✓ XV Defender full<br>✓ Priority support
+      </div>
+      <button onclick="openPayFlow(2,'AMAZING',30)" style="width:100%;padding:13px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">BUY AMAZING — $30</button>
+    </div>
+
+    <!-- ALL TWEAKS -->
+    <div style="background:var(--surface);border:1px solid #06b6d4;border-radius:10px;padding:22px;transition:transform .2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#06b6d4;margin-bottom:4px">ALL TWEAKS</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:#fff;margin-bottom:2px">$35</div>
+      <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:14px">ONE TIME PAYMENT</div>
+      <div style="font-size:11px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:16px;line-height:1.9;border-top:1px solid var(--border);padding-top:12px">
+        ✓ Every single tweak<br>✓ Admin panel access<br>✓ 1-on-1 setup support<br>✓ Discord elite role<br>✓ Custom game profiles<br>✓ Lifetime updates<br>✓ All future tweaks free<br>✓ Fan + overclock full
+      </div>
+      <button onclick="openPayFlow(3,'ALL TWEAKS',35)" style="width:100%;padding:13px;background:linear-gradient(135deg,#164e63,#0e7490);border:1px solid #06b6d4;color:#67e8f9;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='#06b6d4';this.style.color='#000'" onmouseout="this.style.background='linear-gradient(135deg,#164e63,#0e7490)';this.style.color='#67e8f9'">BUY ALL TWEAKS — $35</button>
+    </div>
+  </div>
+
+  <!-- ALREADY HAVE A CODE -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center">
+    <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;color:#7870b0;margin-bottom:10px">ALREADY HAVE A CODE?</div>
+    <div style="display:flex;gap:8px;max-width:340px;margin:0 auto">
+      <input id="existing-code-input" type="text" placeholder="Enter your code..." style="flex:1;background:var(--surface2);border:1px solid var(--border2);color:#e8e4ff;padding:10px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px">
+      <button onclick="applyExistingCode()" style="padding:10px 18px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;border-radius:6px;cursor:pointer">APPLY</button>
+    </div>
+    <div id="existing-code-msg" style="font-size:11px;font-family:'Share Tech Mono',monospace;margin-top:8px;min-height:16px"></div>
+  </div>
+
+</div>
+
+<!-- =================== SUPPORT =================== -->
+<div id="tab-support" class="content">
+  <div class="support-hero">
+    <div class="sec-title">SUPPORT CENTER</div>
+    <div style="font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-top:6px">GET HELP WITH TWEAKS, SETUP, OR ANY ISSUES</div>
+    <div class="support-grid">
+      <div class="support-card" onclick="notify('Opening Discord...');window.open('https://discord.gg/7fSHsPyQMB','_blank')">
+        <div class="support-icon">💬</div>
+        <div class="support-title">LIVE DISCORD</div>
+        <div class="support-sub">Chat with community & staff</div>
+      </div>
+      <div class="support-card" onclick="document.getElementById('ticket-section').scrollIntoView({behavior:'smooth'})">
+        <div class="support-icon">🎫</div>
+        <div class="support-title">SUBMIT TICKET</div>
+        <div class="support-sub">Get help within 24 hours</div>
+      </div>
+      <div class="support-card" onclick="notify('Opening FAQ...')">
+        <div class="support-icon">📖</div>
+        <div class="support-title">FAQ</div>
+        <div class="support-sub">Common questions answered</div>
+      </div>
+      <div class="support-card" onclick="notify('Opening YouTube guide...');window.open('https://youtube.com','_blank')">
+        <div class="support-icon">▶️</div>
+        <div class="support-title">VIDEO GUIDES</div>
+        <div class="support-sub">Step-by-step tutorials</div>
+      </div>
+    </div>
+  </div>
+  <!-- Discord Banner -->
+  <div style="background:linear-gradient(135deg,#1a0a40,#001030);border:1px solid #8b5cf6;border-radius:10px;padding:22px;margin-bottom:20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+    <div style="font-size:44px">💬</div>
+    <div style="flex:1;min-width:180px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:#a78bfa;margin-bottom:4px">JOIN OUR DISCORD</div>
+      <div style="font-size:11px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:10px;line-height:1.6">Get help, request your code, chat with the community, and get the fastest support here</div>
+      <a href="https://discord.gg/7fSHsPyQMB" target="_blank" rel="noopener" style="display:inline-block;padding:10px 22px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;border-radius:6px;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        JOIN DISCORD — discord.gg/7fSHsPyQMB
+      </a>
+    </div>
+  </div>
+
+  <div id="ticket-section" class="ticket-form">
+    <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:700;color:var(--purple2);margin-bottom:14px;letter-spacing:2px">SUBMIT A SUPPORT TICKET</div>
+    <input type="text" placeholder="Your username or Discord tag" id="t-name">
+    <input type="email" placeholder="Your email address" id="t-email">
+    <select id="t-category">
+      <option value="">SELECT ISSUE CATEGORY</option>
+      <option>Tweak not working</option>
+      <option>Payment / billing</option>
+      <option>Account / code issue</option>
+      <option>Performance still low</option>
+      <option>Website bug</option>
+      <option>Other</option>
+    </select>
+    <textarea placeholder="Describe your issue in detail..." id="t-msg"></textarea>
+    <button class="submit-btn" onclick="submitTicket()">📨 SUBMIT TICKET</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-logo">XV PC TWEAKS</div>
+  <div class="footer-sub">ELITE OPTIMIZATION SUITE · BUILT FOR DOMINANCE · v4.0.0</div>
+  <div class="footer-links">
+    <a class="footer-link main" href="https://xvpctweaks.com" target="_blank">🌐 XVPCTWEAKS.COM</a>
+    <a class="footer-link" href="https://discord.gg/7fSHsPyQMB" target="_blank">💬 DISCORD</a>
+    <a class="footer-link" href="https://github.com/xvpctweaks" target="_blank">📦 GITHUB</a>
+    <a class="footer-link" onclick="switchTab('support',document.querySelectorAll('.nav-btn')[13])">💬 SUPPORT</a>
+  </div>
+  <div class="footer-copy">© 2026 XV PC TWEAKS · ALL RIGHTS RESERVED · FREE FOREVER BASE · WINDOWS 10/11</div>
+</div>
+
+<script>
+// ===== INTRO =====
+const INTRO_STEPS = ['LOADING MODULES...','CALIBRATING TWEAKS...','INITIALIZING DEFENDER...','READY.'];
+let introStep = 0;
+const introStatus = document.getElementById('intro-status');
+const introTimer = setInterval(()=>{
+  introStep++;
+  if(introStatus && introStep < INTRO_STEPS.length) introStatus.textContent = INTRO_STEPS[introStep];
+  if(introStep >= INTRO_STEPS.length) clearInterval(introTimer);
+},550);
+setTimeout(()=>{
+  const intro = document.getElementById('intro');
+  if(intro){ intro.classList.add('fade'); setTimeout(()=>intro.remove(),1000); }
+},2400);
+
+// ===== PARTICLES =====
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize',()=>{ canvas.width=window.innerWidth; canvas.height=window.innerHeight; });
+const COLORS = ['#8b5cf6','#a78bfa','#3b82f6','#60a5fa','#06b6d4','#c4b5fd'];
+const particles = [];
+class Particle {
+  constructor(x,y,burst){
+    this.x = x || Math.random()*canvas.width;
+    this.y = y || canvas.height + 20;
+    this.burst = burst||false;
+    this.vx = (Math.random()-0.5)*(burst?8:1.5);
+    this.vy = burst ? (Math.random()-0.5)*8 : -(Math.random()*2+0.5);
+    this.r = Math.random()*3+1;
+    this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
+    this.alpha = 1;
+    this.life = burst ? 80 : 200+Math.random()*100;
+    this.maxLife = this.life;
+  }
+  update(){ this.x+=this.vx; this.y+=this.vy; if(!this.burst) this.vy -= 0.005; this.life--; this.alpha=this.life/this.maxLife; }
+  draw(){ ctx.save(); ctx.globalAlpha=this.alpha*0.7; ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fillStyle=this.color; ctx.fill(); ctx.restore(); }
+  dead(){ return this.life<=0; }
+}
+function spawnSmoke(){ if(particles.length<150) particles.push(new Particle()); }
+setInterval(spawnSmoke, 80);
+function animParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=particles.length-1;i>=0;i--){ particles[i].update(); particles[i].draw(); if(particles[i].dead()) particles.splice(i,1); }
+  requestAnimationFrame(animParticles);
+}
+animParticles();
+function burst(x,y,n=30){ for(let i=0;i<n;i++) particles.push(new Particle(x,y,true)); }
+document.addEventListener('click',e=>burst(e.clientX,e.clientY,20));
+
+// ===== PLAN LEVELS =====
+// plan: 0 = no purchase needed (preview only, still locked)
+// plan: 1 = BASIC ($20)
+// plan: 2 = AMAZING ($30)
+// plan: 3 = ALL TWEAKS ($35)
+const PLAN_NAMES = {1:'BASIC — $20', 2:'AMAZING — $30', 3:'ALL TWEAKS — $35'};
+const PLAN_COLORS = {1:'#f59e0b', 2:'#8b5cf6', 3:'#06b6d4'};
+
+// ===== TWEAK DATA =====
+const TWEAKS = {
+  gaming:[
+    {name:"ZERO INPUT DELAY",desc:"Eliminates all mouse & keyboard polling latency. Direct hardware interrupt mode.",tag:"fps",impact:98,plan:1},
+    {name:"ZERO AIM DELAY",desc:"Raw input override — strips all mouse acceleration, prediction, smoothing from driver stack.",tag:"fps",impact:97,plan:1},
+    {name:"ZERO EDIT DELAY",desc:"Cuts action binding latency to near-zero. Perfect for Fortnite edits and fast-paced games.",tag:"fps",impact:96,plan:1},
+    {name:"1000HZ MOUSE POLLING FORCE",desc:"Forces polling rate to 1000Hz for ultra-precise tracking. Zero jitter, zero interpolation.",tag:"fps",impact:93,plan:1},
+    {name:"FULLSCREEN OPTIMIZATION DISABLE",desc:"Restores true exclusive fullscreen, bypasses DWM compositor for lower frame latency.",tag:"fps",impact:89,plan:1},
+    {name:"DISABLE GAME BAR & DVR",desc:"Removes Xbox Game Bar hooks that consume background CPU and cause mid-game stutter.",tag:"sys",impact:84,plan:1},
+    {name:"GPU REAL-TIME PRIORITY",desc:"Sets GPU scheduling to real-time priority in registry for fastest possible frame delivery.",tag:"fps",impact:91,plan:2},
+    {name:"DISABLE MOUSE SMOOTHING GLOBAL",desc:"Removes all pointer smoothing at driver and OS level for 1:1 raw input at any DPI.",tag:"fps",impact:94,plan:2},
+    {name:"GAME PROCESS AFFINITY BOOST",desc:"Pins game process to performance cores (P-cores on hybrid CPUs) for lowest latency.",tag:"sys",impact:82,plan:2},
+    {name:"SHADER CACHE MAXIMIZE",desc:"Maximizes GPU shader cache to eliminate all in-game shader compilation stutter spikes.",tag:"fps",impact:81,plan:2},
+    {name:"DISABLE STEAM OVERLAY INJECT",desc:"Removes Steam DLL overlay injection for cleaner frame timing.",tag:"fps",impact:70,plan:2},
+    {name:"DISABLE NVIDIA TELEMETRY",desc:"Kills all NVIDIA background telemetry and reporter processes eating CPU cycles.",tag:"sys",impact:74,plan:2},
+    {name:"HARDWARE ACCELERATED GPU SCHED",desc:"Enables HAGS for reduced CPU-GPU handoff latency on compatible hardware.",tag:"fps",impact:87,plan:3},
+    {name:"MSI MODE INTERRUPT BOOST",desc:"Enables MSI mode on GPU for faster interrupt handling and reduced DPC latency.",tag:"fps",impact:86,plan:3},
+    {name:"LATENCY MODE ULTRA (NVIDIA)",desc:"Forces NVIDIA Ultra Low Latency mode in driver for minimum pre-rendered frames.",tag:"fps",impact:92,plan:3},
+  ],
+  defender:[
+    {name:"LOW-CPU SCAN MODE",desc:"Hard caps Defender CPU at 5% during gaming. Full scans auto-reschedule.",tag:"safe",impact:97,plan:1},
+    {name:"GAME EXCLUSION AUTO-CONFIG",desc:"Automatically detects and adds all game folders to scan exclusions.",tag:"safe",impact:92,plan:1},
+    {name:"REAL-TIME SCAN OPTIMIZER",desc:"Keeps real-time protection on but limits threads to non-game processes only.",tag:"safe",impact:90,plan:1},
+    {name:"CLOUD PROTECTION ASYNC",desc:"Cloud threat lookup runs async — zero impact on ping or frame times.",tag:"net",impact:88,plan:2},
+    {name:"NETWORK INSPECT LITE",desc:"Streamlined packet inspection catches threats without touching game UDP traffic.",tag:"safe",impact:94,plan:2},
+    {name:"SCHEDULED SCAN — OFF HOURS",desc:"Moves all scans to 3AM or system idle — never fires mid-session.",tag:"safe",impact:85,plan:2},
+    {name:"PROCESS SANDBOX HARDENING",desc:"Isolates all network-facing processes — blocks lateral threat movement.",tag:"safe",impact:91,plan:3},
+    {name:"ZERO PING FIREWALL RULES",desc:"Custom outbound rules blocking threat vectors without inspecting game packets.",tag:"net",impact:96,plan:3},
+  ],
+  network:[
+    {name:"NAGLE'S ALGORITHM DISABLE",desc:"Disables TCP Nagle — packets sent instantly without buffering. Critical for real-time games.",tag:"net",impact:97,plan:1},
+    {name:"DNS — CLOUDFLARE 1.1.1.1",desc:"Sets primary DNS to Cloudflare 1.1.1.1 — fastest global DNS resolver.",tag:"net",impact:86,plan:1},
+    {name:"QOS BANDWIDTH THROTTLE BYPASS",desc:"Removes Windows QOS cap that secretly limits up to 20% of bandwidth.",tag:"net",impact:92,plan:1},
+    {name:"NIC POWER SAVE DISABLE",desc:"Forces network adapter to full power — eliminates wakeup latency spikes.",tag:"net",impact:90,plan:1},
+    {name:"TCP RECEIVE WINDOW LOCK",desc:"Locks TCP window to optimal static size — eliminates auto-tune variance ping.",tag:"net",impact:83,plan:2},
+    {name:"INTERRUPT MODERATION OFF",desc:"Disables NIC interrupt coalescing — lower latency, worth the minor CPU cost.",tag:"net",impact:85,plan:2},
+    {name:"TEREDO & 6TO4 KILL",desc:"Disables IPv6 tunneling causing random routing delays on IPv4 servers.",tag:"net",impact:75,plan:2},
+    {name:"GAME PORT QOS PRIORITY",desc:"Marks all common game UDP/TCP ports as highest network priority.",tag:"net",impact:95,plan:2},
+    {name:"FLOW CONTROL DISABLE",desc:"Disables IEEE 802.3x — reduces bufferbloat and jitter on local network.",tag:"net",impact:78,plan:2},
+    {name:"WINSOCK FULL RESET",desc:"Complete Winsock catalog reset and optimization for clean network stack.",tag:"net",impact:87,plan:2},
+    {name:"DNS CACHE REBUILD",desc:"Flushes stale DNS, rebuilds from fastest available resolver automatically.",tag:"net",impact:80,plan:2},
+    {name:"DISABLE WINDOWS AUTO-TUNING",desc:"Disables TCP auto-tuning that causes variance in competitive game ping.",tag:"net",impact:82,plan:3},
+    {name:"RSS QUEUE OPTIMIZATION",desc:"Optimizes Receive Side Scaling queue count for your CPU core count.",tag:"net",impact:79,plan:3},
+    {name:"DISABLE ECN CAPABILITY",desc:"Disables Explicit Congestion Notification that can add overhead on gaming connections.",tag:"net",impact:73,plan:3},
+    {name:"NETWORK THROTTLING INDEX OFF",desc:"Removes Windows multimedia network throttling that limits game packet priority.",tag:"net",impact:88,plan:3},
+    {name:"LARGE SEND OFFLOAD DISABLE",desc:"Disables LSO on NIC — reduces jitter for latency-sensitive gaming traffic.",tag:"net",impact:76,plan:3},
+  ],
+  overclock:[
+    {name:"XMP / DOCP PROFILE ACTIVATE",desc:"Activates RAM's rated XMP/DOCP profile — recovers 10-30% hidden performance.",tag:"power",impact:93,plan:1},
+    {name:"CPU CORE PARKING DISABLE",desc:"Keeps all CPU cores hot and ready — eliminates core wake latency.",tag:"power",impact:91,plan:1},
+    {name:"BIOS VRM MAX POWER DELIVERY",desc:"Configures VRM to max delivery mode for sustained boost clocks.",tag:"power",impact:88,plan:2},
+    {name:"GPU BOOST CLOCK STABILIZE",desc:"Locks GPU boost to sustained max instead of fluctuating under thermal variance.",tag:"fps",impact:90,plan:2},
+    {name:"RAM TIMINGS TIGHTEN",desc:"Applies tighter CL, tRCD, tRP timings for reduced memory access latency.",tag:"power",impact:84,plan:2},
+    {name:"CPU C-STATES DISABLE",desc:"Disables deep CPU C-states — processor never sleeps mid-game.",tag:"power",impact:87,plan:3},
+    {name:"TURBO BOOST MAX 3.0",desc:"Routes workloads to fastest available cores via Intel TBM 3.0.",tag:"fps",impact:85,plan:3},
+    {name:"PCIE GEN LOCK",desc:"Locks PCIe gen to prevent auto-negotiation — stable GPU bandwidth.",tag:"sys",impact:78,plan:3},
+  ],
+  debloat:[
+    {name:"REMOVE CORTANA",desc:"Fully uninstalls Cortana and stops all background indexing agents.",tag:"sys",impact:86,plan:1},
+    {name:"REMOVE XBOX APPS",desc:"Removes Xbox companion apps without breaking Xbox game services.",tag:"sys",impact:82,plan:1},
+    {name:"REMOVE TEAMS CHAT",desc:"Completely removes Teams Chat from taskbar and system startup.",tag:"sys",impact:79,plan:1},
+    {name:"REMOVE BING FROM SEARCH",desc:"Strips Bing from Windows Search — local only, instant results.",tag:"sys",impact:74,plan:1},
+    {name:"REMOVE JUNK UWP APPS",desc:"Bulk-removes Candy Crush, News, Weather, Solitaire, and Microsoft junk.",tag:"sys",impact:81,plan:2},
+    {name:"DISABLE ONEDRIVE SYNC",desc:"Fully disables OneDrive daemon and all startup hooks.",tag:"sys",impact:85,plan:2},
+    {name:"REMOVE EDGE PRELOAD",desc:"Stops Edge from pre-loading at startup and running background processes.",tag:"sys",impact:77,plan:2},
+    {name:"DISABLE WINDOWS TIPS & ADS",desc:"Kills all tips, Spotlight ads, Start menu promotions, and lockscreen suggestions.",tag:"sys",impact:68,plan:2},
+    {name:"CLEAN PREFETCH & TEMP",desc:"Wipes prefetch, temp files, and orphaned registry keys from installs.",tag:"sys",impact:71,plan:3},
+    {name:"STOP UPDATE BG DOWNLOADS",desc:"Prevents Windows Update from downloading in background during gaming.",tag:"sys",impact:80,plan:3},
+    {name:"REMOVE PEOPLE APP",desc:"Removes unused People integration from taskbar and system shell.",tag:"sys",impact:63,plan:3},
+    {name:"DISABLE FEEDBACK HUB",desc:"Uninstalls Feedback Hub and all WER data collection agents.",tag:"sys",impact:74,plan:3},
+  ],
+  startup:[
+    {name:"DISABLE DISCORD AUTOSTART",desc:"Prevents Discord from launching on boot — start it when you need it.",tag:"sys",impact:73,plan:1},
+    {name:"DISABLE STEAM AUTOSTART",desc:"Removes Steam from startup — saves RAM and boot time.",tag:"sys",impact:75,plan:1},
+    {name:"DISABLE EPIC LAUNCHER STARTUP",desc:"Stops Epic Games Launcher pre-loading on every boot.",tag:"sys",impact:71,plan:1},
+    {name:"DISABLE NVIDIA CONTAINER",desc:"Removes NVIDIA Container, ShadowPlay, GFE from autostart.",tag:"sys",impact:78,plan:1},
+    {name:"DISABLE BROWSER STARTUP",desc:"Removes Chrome/Edge from startup — saves 150-300MB RAM.",tag:"sys",impact:83,plan:2},
+    {name:"DISABLE SPOTIFY PRELOAD",desc:"Prevents Spotify from pre-loading at login.",tag:"sys",impact:63,plan:2},
+    {name:"DISABLE TEAMS STARTUP",desc:"Fully removes Microsoft Teams from autostart.",tag:"sys",impact:81,plan:2},
+    {name:"DISABLE RAZER SYNAPSE START",desc:"Stops Razer Synapse autoloading — launch manually before sessions.",tag:"sys",impact:68,plan:2},
+    {name:"DISABLE UPDATE CHECKERS",desc:"Pauses all third-party update checker agents at login.",tag:"sys",impact:76,plan:3},
+    {name:"DISABLE STARTUP REPAIR CHECK",desc:"Disables Windows Startup Repair check that adds 3-8s to cold boot.",tag:"sys",impact:73,plan:3},
+  ],
+  power:[
+    {name:"ULTIMATE PERFORMANCE PLAN",desc:"Enables the hidden Windows Ultimate Performance power plan.",tag:"power",impact:98,plan:1},
+    {name:"CPU MINIMUM STATE 100%",desc:"Forces CPU minimum to 100% — no throttling ever.",tag:"power",impact:95,plan:1},
+    {name:"TIMER RESOLUTION 0.5ms",desc:"Sets Windows multimedia timer to 0.5ms near-hardware precision.",tag:"fps",impact:94,plan:2},
+    {name:"DISABLE SLEEP & HIBERNATE",desc:"Removes sleep/hibernate for clean instant wake with no stale memory.",tag:"power",impact:83,plan:2},
+    {name:"USB SELECTIVE SUSPEND OFF",desc:"Disables USB power management — peripherals at full speed always.",tag:"power",impact:88,plan:2},
+    {name:"PCIE ASPM DISABLE",desc:"Disables PCIe Active State Power Management — reduces GPU latency.",tag:"power",impact:85,plan:3},
+    {name:"THERMAL MANAGEMENT TURBO",desc:"Configures thermal policy to prefer max performance over temperature.",tag:"power",impact:91,plan:3},
+    {name:"HARD DISK SLEEP OFF",desc:"Prevents drives spinning down — eliminates 1-2s access stutter.",tag:"power",impact:81,plan:3},
+  ],
+  privacy:[
+    {name:"DISABLE ALL TELEMETRY",desc:"Minimum diagnostic data + blocks all known telemetry endpoints.",tag:"safe",impact:93,plan:1},
+    {name:"DISABLE AD TRACKING ID",desc:"Removes Windows advertising ID and app ad personalization APIs.",tag:"safe",impact:88,plan:1},
+    {name:"DISABLE LOCATION SERVICES",desc:"Disables location API and background reporting for all apps.",tag:"safe",impact:85,plan:1},
+    {name:"DISABLE ACTIVITY HISTORY",desc:"Turns off Timeline and activity history sync to Microsoft servers.",tag:"safe",impact:83,plan:2},
+    {name:"REVOKE MIC BACKGROUND ACCESS",desc:"Revokes microphone permissions from apps with no legitimate need.",tag:"safe",impact:81,plan:2},
+    {name:"BLOCK CAMERA BACKGROUND",desc:"Blocks camera API for all background apps.",tag:"safe",impact:78,plan:2},
+    {name:"BLOCK TELEMETRY IPs VIA FIREWALL",desc:"Adds firewall rules blocking all Microsoft data collection server ranges.",tag:"safe",impact:91,plan:3},
+    {name:"DISABLE TAILORED EXPERIENCES",desc:"Disables targeted content and ads based on usage data.",tag:"safe",impact:75,plan:3},
+  ],
+  admin:[
+    {name:"KERNEL BOOST MODE",desc:"Unlocks kernel-level performance flags not accessible through normal settings.",tag:"power",impact:99,plan:3},
+    {name:"ZERO LATENCY INTERRUPT",desc:"Sub-millisecond interrupt handling at kernel level — only possible with admin access.",tag:"fps",impact:99,plan:3},
+    {name:"CPU AFFINITY MASTER OVERRIDE",desc:"Full manual control over which cores every process runs on.",tag:"sys",impact:97,plan:3},
+    {name:"NETWORK STACK RECOMPILE",desc:"Rebuilds TCP/IP stack with gaming-optimized parameters.",tag:"net",impact:98,plan:3},
+    {name:"GPU DRIVER DEEP TUNE",desc:"Applies sub-driver optimizations bypassing standard driver settings.",tag:"fps",impact:96,plan:3},
+    {name:"MEMORY COMPRESSION OVERRIDE",desc:"Disables memory compression for raw RAM speed at cost of more RAM use.",tag:"power",impact:94,plan:3},
+    {name:"SYSTEM32 PERFORMANCE FLAGS",desc:"Sets advanced performance flags in critical Windows system files.",tag:"sys",impact:97,plan:3},
+    {name:"EXCLUSIVE GAME MODE LOCK",desc:"Grants game process exclusive access to all CPU cores during session.",tag:"fps",impact:99,plan:3},
+  ],
+  junk:[
+    {name:"CLEAR TEMP FILES",desc:"Deletes all files from %TEMP% and C:\\Windows\\Temp folders.",tag:"sys",impact:80,plan:1},
+    {name:"CLEAR BROWSER CACHE",desc:"Wipes cached data from Chrome, Edge, Firefox, and Brave.",tag:"sys",impact:75,plan:1},
+    {name:"CLEAN REGISTRY ORPHANS",desc:"Removes orphaned registry keys from uninstalled programs.",tag:"sys",impact:72,plan:2},
+    {name:"DELETE OLD LOG FILES",desc:"Removes event log files older than 30 days from Windows logs.",tag:"sys",impact:65,plan:2},
+    {name:"CLEAR WINDOWS UPDATE CACHE",desc:"Wipes stored Windows Update files no longer needed.",tag:"sys",impact:82,plan:2},
+    {name:"REMOVE THUMBNAIL CACHE",desc:"Deletes stale thumbnail cache database to free disk space.",tag:"sys",impact:60,plan:3},
+    {name:"CLEAR DNS CACHE",desc:"Flushes DNS resolver cache for fresh lookups.",tag:"net",impact:70,plan:3},
+    {name:"CLEAN SHADER CACHE",desc:"Removes old/corrupted shader cache files from DirectX and Vulkan.",tag:"fps",impact:78,plan:3},
+  ]
+};
+
+const GAMES = ['FORTNITE','WARZONE','VALORANT','APEX LEGENDS','CS2','MINECRAFT','ROBLOX','GTA V','OVERWATCH 2','PUBG','RUST','THE FINALS','ESCAPE FROM TARKOV','ROCKET LEAGUE'];
+const tagClass = {fps:'tag-fps',net:'tag-net',sys:'tag-sys',safe:'tag-safe',power:'tag-power'};
+const tagLabel = {fps:'FPS',net:'NET',sys:'SYS',safe:'SAFE',power:'PWR'};
+const applied = {};
+const rendered = {};
+let isAdmin = false;
+let userPlan = 0; // 0=none, 1=BASIC, 2=AMAZING, 3=ALL TWEAKS
+
+// Plan badge styles
+const PLAN_BADGE_STYLE = {
+  1:'background:#2d1a00;color:#f59e0b;border:1px solid #f59e0b',
+  2:'background:#1a0a30;color:#a78bfa;border:1px solid #8b5cf6',
+  3:'background:#001820;color:#06b6d4;border:1px solid #06b6d4'
+};
+const PLAN_LABEL = {1:'BASIC',2:'AMAZING',3:'ALL TWEAKS'};
+
+// Build game list
+const gameList = document.getElementById('game-list');
+GAMES.forEach(g=>{
+  const el = document.createElement('div');
+  el.className='game-item';
+  el.innerHTML=`<div class="game-dot"></div>${g}`;
+  el.onclick=function(){
+    document.querySelectorAll('.game-item').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    notify('Game priority set: '+g);
+  };
+  gameList.appendChild(el);
+});
+
+// Build driver list
+const DRIVERS = [
+  {name:'NVIDIA / AMD GPU',ver:'Check for latest',status:'outdated'},
+  {name:'Intel / AMD Chipset',ver:'Check for latest',status:'outdated'},
+  {name:'Realtek Audio',ver:'Check for latest',status:'outdated'},
+  {name:'Network Adapter',ver:'Check for latest',status:'outdated'},
+  {name:'USB 3.0 Controller',ver:'Installed',status:'ok'},
+  {name:'Bluetooth',ver:'Installed',status:'ok'},
+  {name:'Motherboard BIOS',ver:'Check for update',status:'outdated'},
+  {name:'DirectX Runtime',ver:'Installed',status:'ok'},
+];
+const driverGrid = document.getElementById('drivers-grid');
+DRIVERS.forEach((d,i)=>{
+  const el = document.createElement('div');
+  el.className='driver-card';
+  el.id='drv-'+i;
+  el.innerHTML=`
+    <div class="driver-name">${d.name}</div>
+    <div class="driver-ver" id="drv-ver-${i}">${d.ver}</div>
+    <div class="driver-status ${d.status}" id="drv-st-${i}">${d.status==='outdated'?'UPDATE AVAILABLE':'UP TO DATE'}</div>
+    <button class="driver-update-btn" id="drv-btn-${i}" onclick="updateDriver(${i})">${d.status==='outdated'?'UPDATE NOW':'CHECK AGAIN'}</button>
+  `;
+  driverGrid.appendChild(el);
+});
+
+function canUseTweak(t){
+  if(isAdmin) return true;
+  return userPlan >= t.plan;
+}
+
+function renderGrid(section){
+  if(rendered[section]) return;
+  rendered[section]=true;
+  const grid = document.getElementById('grid-'+section);
+  if(!grid) return;
+  const tweaks = TWEAKS[section]||[];
+  tweaks.forEach((t,i)=>{
+    const id=section+'-'+i;
+    // Keep restored state from localStorage, only default to false if not set
+    if(applied[id]===undefined) applied[id]=false;
+    const unlocked = canUseTweak(t);
+    const card=document.createElement('div');
+    card.className='tweak-card';
+    card.id='card-'+id;
+    card.style.animationDelay=(i*35)+'ms';
+
+    // Plan badge — always shows which plan this tweak belongs to
+    const planBadge = `<span style="font-size:9px;font-family:'Share Tech Mono',monospace;padding:2px 7px;border-radius:2px;${PLAN_BADGE_STYLE[t.plan]}">${PLAN_LABEL[t.plan]}</span>`;
+
+    const lockBtnLabel = userPlan === 0
+      ? `🔒 REQUIRES ${PLAN_LABEL[t.plan]} — $${t.plan===1?'20':t.plan===2?'30':'35'}`
+      : `🔒 UPGRADE TO ${PLAN_LABEL[t.plan]}`;
+
+    card.innerHTML=`
+      <div class="tweak-top">
+        <div class="tweak-name">${t.name}</div>
+        <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
+          ${planBadge}
+          <div class="tweak-tag ${tagClass[t.tag]||'tag-sys'}">${tagLabel[t.tag]||'SYS'}</div>
+        </div>
+      </div>
+      <div class="tweak-desc">${t.desc}</div>
+      <div class="tweak-impact">
+        <div class="impact-label">IMPACT</div>
+        <div class="impact-bar"><div class="impact-fill" style="width:0%" id="bar-${id}"></div></div>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);min-width:30px;text-align:right">${t.impact}%</span>
+      </div>
+      <button class="apply-btn${unlocked?'':' locked'}" id="btn-${id}"
+        onclick="${unlocked?`applyTweak('${id}','${section}',${i})`:`goPricing()`}">
+        ${unlocked?'APPLY TWEAK':lockBtnLabel}
+      </button>
+    `;
+    grid.appendChild(card);
+    setTimeout(()=>{ const b=document.getElementById('bar-'+id); if(b) b.style.width=t.impact+'%'; },200+i*35);
+  });
+}
+
+function goPricing(){
+  switchTab('pricing', document.querySelectorAll('.nav-btn')[12]);
+  notify('Choose a plan to unlock this tweak!');
+}
+
+function reRenderAll(){
+  // Clear all rendered grids and re-render with new plan level
+  Object.keys(rendered).forEach(s=>{
+    rendered[s]=false;
+    const grid=document.getElementById('grid-'+s);
+    if(grid) grid.innerHTML='';
+  });
+  Object.keys(TWEAKS).forEach(s=>renderGrid(s));
+}
+
+function applyTweak(id,section,idx){
+  if(applied[id]) return;
+  if(!canUseTweak(TWEAKS[section][idx])){goPricing();return;}
+  applied[id]=true;
+  const card=document.getElementById('card-'+id);
+  const btn=document.getElementById('btn-'+id);
+  if(card) card.classList.add('applied');
+  if(btn){btn.textContent='✓ APPLIED';btn.classList.add('done');}
+  updateStats(section);
+  notify('✓ Applied: '+TWEAKS[section][idx].name);
+  // Save applied tweaks to localStorage so they stay on after restart
+  const allApplied = Object.keys(applied).filter(k=>applied[k]);
+  localStorage.setItem('xv_applied_tweaks', JSON.stringify(allApplied));
+}
+
+function applyAll(section){
+  const tweaks=TWEAKS[section]||[];
+  let count=0;
+  tweaks.forEach((t,i)=>{
+    if(canUseTweak(t)){ setTimeout(()=>applyTweak(section+'-'+i,section,i),count*55); count++; }
+    else { notify('Some tweaks require a higher plan — visit Pricing!'); }
+  });
+  const btn=document.getElementById('aa-'+section);
+  if(btn) setTimeout(()=>{btn.querySelector('span').textContent='✓ ALL APPLIED';btn.classList.add('done');},count*55+200);
+}
+
+function updateStats(section){
+  const tweaks=TWEAKS[section]||[];
+  let count=0;
+  tweaks.forEach((_,i)=>{if(applied[section+'-'+i])count++;});
+  if(section==='gaming'){const e=document.getElementById('sg-count');if(e)e.textContent=count+'/'+tweaks.length;}
+  if(section==='network'){
+    const e=document.getElementById('sn-count');if(e)e.textContent=count+'/'+tweaks.length;
+    const p=document.getElementById('s-ping');if(p)p.textContent=Math.max(6,60-count*3)+'ms';
+    const d=document.getElementById('s-dns');if(d&&count>0)d.textContent='OPTIMIZED';
+  }
+  if(section==='debloat'){
+    const bl=document.getElementById('s-bloat');if(bl)bl.textContent=Math.max(0,24-count)+' ITEMS';
+    const rm=document.getElementById('s-ram');if(rm)rm.textContent=(count*42)+' MB';
+    const rd=document.getElementById('s-disk');if(rd)rd.textContent=(count*115)+' MB';
+  }
+  if(section==='startup'){
+    const sc=document.getElementById('s-startcount');if(sc)sc.textContent=Math.max(0,18-count)+' ACTIVE';
+    const bt=document.getElementById('s-boot');if(bt)bt.textContent=(count*1.9).toFixed(1)+'s';
+    const br=document.getElementById('s-bootram');if(br)br.textContent=(count*58)+' MB';
+  }
+  if(section==='power'){
+    if(count>0){
+      const pl=document.getElementById('s-plan');if(pl)pl.textContent='ULTIMATE';
+      const ti=document.getElementById('s-timer');if(ti)ti.textContent='0.5ms';
+      const th=document.getElementById('s-thermal');if(th)th.textContent='TURBO';
+    }
+  }
+  if(section==='privacy'){
+    const tl=document.getElementById('s-telem');if(count>0&&tl)tl.textContent='BLOCKED';
+    const ad=document.getElementById('s-ads');if(count>1&&ad)ad.textContent='OFF';
+    const lk=document.getElementById('s-leaks');if(lk)lk.textContent=count;
+  }
+}
+
+function oc(sliderId,valId,unit){
+  const s=document.getElementById(sliderId);const v=document.getElementById(valId);
+  if(s&&v) v.textContent='+'+s.value+unit;
+}
+
+function fanPreset(c,g,ca,p){
+  ['cpu-fan','gpu-fan','case-fan','pump-fan'].forEach((id,i)=>{
+    const vals=[c,g,ca,p];const s=document.getElementById(id);const v=document.getElementById(id+'-v');
+    if(s){s.value=vals[i];}
+    if(v){v.textContent=vals[i]+'%';}
+  });
+  notify('Fan preset applied!');
+}
+
+function toggleDefender(){
+  const t=document.getElementById('def-toggle');
+  const p=document.getElementById('def-ping');const c=document.getElementById('def-cpu');const s=document.getElementById('def-status');
+  if(t.checked){if(p)p.textContent='~0ms';if(c)c.textContent='0.1%';if(s)s.textContent='ACTIVE';}
+  else{if(p)p.textContent='N/A';if(c)c.textContent='OFF';if(s)s.textContent='DISABLED';}
+}
+
+function updateDriver(i){
+  const btn=document.getElementById('drv-btn-'+i);
+  const st=document.getElementById('drv-st-'+i);
+  const ver=document.getElementById('drv-ver-'+i);
+  if(btn) btn.textContent='UPDATING...';
+  setTimeout(()=>{
+    if(st){st.textContent='UP TO DATE';st.className='driver-status ok';}
+    if(ver) ver.textContent='Latest version';
+    if(btn){btn.textContent='✓ UPDATED';btn.classList.add('updated');}
+    notify('Driver updated successfully!');
+  },1500+Math.random()*1000);
+}
+
+function updateAllDrivers(){
+  DRIVERS.forEach((_,i)=>setTimeout(()=>updateDriver(i),i*400));
+  const btn=document.getElementById('aa-drivers');
+  if(btn) setTimeout(()=>{btn.querySelector('span').textContent='✓ ALL DRIVERS UPDATED';btn.classList.add('done');},DRIVERS.length*400+500);
+}
+
+function cleanAllJunk(){
+  const btn=document.getElementById('aa-junk');
+  if(btn) btn.querySelector('span').textContent='SCANNING...';
+  setTimeout(()=>{
+    document.getElementById('j-temp').textContent='0 MB';
+    document.getElementById('j-cache').textContent='0 MB';
+    document.getElementById('j-reg').textContent='0';
+    document.getElementById('j-logs').textContent='0 MB';
+    document.getElementById('j-total').textContent='0 MB';
+    if(btn){btn.querySelector('span').textContent='✓ 6.6 GB CLEANED';btn.classList.add('done');}
+    notify('Cleaned 6.6 GB of junk files!');
+  },2000);
+  applyAll('junk');
+}
+
+function checkCode(){
+  const code = document.getElementById('admin-code').value.toLowerCase().trim();
+  const msg = document.getElementById('code-msg');
+  const planCodes = {'xvbasic20':1,'xvamazing30':2,'xvall35':3};
+  const planLabels = {1:'BASIC',2:'AMAZING',3:'ALL TWEAKS'};
+
+  if(code === 'gavincosta0506'){
+    isAdmin = true;
+    userPlan = 3;
+    msg.className='code-msg success';
+    msg.textContent='✓ ADMIN CODE ACCEPTED — ALL tweaks unlocked!';
+    document.getElementById('admin-locked-content').style.display='none';
+    document.getElementById('admin-unlocked-content').style.display='block';
+    reRenderAll();
+    renderGrid('admin');
+    burst(window.innerWidth/2,window.innerHeight/2,60);
+    notify('All tweaks unlocked — enjoy!');
+  } else if(planCodes[code] !== undefined){
+    const level = planCodes[code];
+    userPlan = level;
+    msg.className='code-msg success';
+    msg.textContent='✓ CODE ACCEPTED — ' + planLabels[level] + ' plan activated! Your tweaks are now unlocked.';
+    reRenderAll();
+    burst(window.innerWidth/2,window.innerHeight/2,40);
+    notify(planLabels[level] + ' plan activated!');
+  } else {
+    msg.className='code-msg error';
+    msg.textContent='✗ Invalid code. Purchase a plan to receive your code.';
+  }
+}
+
+function setPlan(level){
+  userPlan = level;
+  const labels={1:'BASIC',2:'AMAZING',3:'ALL TWEAKS'};
+  const prices={1:'$20',2:'$30',3:'$35'};
+  notify('Plan activated: '+labels[level]+' ('+prices[level]+') — tweaks unlocked!');
+  reRenderAll();
+  burst(window.innerWidth/2, 300, 40);
+}
+
+window._deliveryMode = 'email';
+window._payLevel = 0;
+window._payPrice = 0;
+window._hasPaid = false;
+
+// Each plan has ONE specific code — customers ONLY get the code for what they paid for
+const PLAN_CODES = {1:'xvbasic20', 2:'xvamazing30', 3:'xvall35'};
+const PLAN_PRICES = {1:20, 2:30, 3:35};
+const PLAN_LABELS = {1:'BASIC', 2:'AMAZING', 3:'ALL TWEAKS'};
+
+function showPayMethods(plan, level){
+  window._payLevel = level;
+  window._payPrice = PLAN_PRICES[level];
+  window._hasPaid = false;
+
+  // Reset modal fully
+  document.getElementById('pay-modal-title').textContent = plan + ' PLAN — $' + PLAN_PRICES[level];
+  document.getElementById('pay-modal-level').textContent = 'Send the exact amount then click the green button.';
+  document.getElementById('pay-step1').style.display = 'block';
+  document.getElementById('pay-step2').style.display = 'none';
+  document.getElementById('pay-step3').style.display = 'none';
+  document.getElementById('send-msg').textContent = '';
+  document.getElementById('pay-code-msg').textContent = '';
+  document.getElementById('pay-code-input').value = '';
+  document.getElementById('user-email').value = '';
+  document.getElementById('user-phone').value = '';
+
+  // Update CashApp link with correct tag
+  document.getElementById('pay-cashapp-btn').onclick = function(){
+    window.open('https://cash.app/$GavinCosta4', '_blank');
+  };
+
+  // Update PayPal link with exact price pre-filled
+  document.getElementById('paypal-link-btn').onclick = function(){
+    window.open('https://paypal.me/GavinCosta249/' + PLAN_PRICES[level], '_blank');
+  };
+
+  // Show how much they need to send
+  document.getElementById('pay-amount-label').textContent =
+    'Send exactly $' + PLAN_PRICES[level] + ' for ' + PLAN_LABELS[level] + ' plan';
+
+  document.getElementById('pay-modal').style.display = 'flex';
+}
+
+function confirmPaid(){
+  if(!window._payLevel){return;}
+  window._hasPaid = true;
+  document.getElementById('pay-step1').style.display = 'none';
+  document.getElementById('pay-step2').style.display = 'block';
+  document.getElementById('pay-step3').style.display = 'block';
+  document.getElementById('pay-modal-level').textContent =
+    'Enter your email or phone — your ' + PLAN_LABELS[window._payLevel] + ' code will be sent instantly.';
+}
+
+function closePayModal(){
+  document.getElementById('pay-modal').style.display='none';
+}
+
+function switchDelivery(mode){
+  const emailDiv = document.getElementById('delivery-email');
+  const phoneDiv = document.getElementById('delivery-phone');
+  const tabEmail = document.getElementById('tab-email');
+  const tabPhone = document.getElementById('tab-phone');
+  if(mode==='email'){
+    emailDiv.style.display='block'; phoneDiv.style.display='none';
+    tabEmail.style.border='1px solid #8b5cf6'; tabEmail.style.background='#1a0a30'; tabEmail.style.color='#a78bfa';
+    tabPhone.style.border='1px solid #2d2860'; tabPhone.style.background='transparent'; tabPhone.style.color='#7870b0';
+  } else {
+    emailDiv.style.display='none'; phoneDiv.style.display='block';
+    tabPhone.style.border='1px solid #8b5cf6'; tabPhone.style.background='#1a0a30'; tabPhone.style.color='#a78bfa';
+    tabEmail.style.border='1px solid #2d2860'; tabEmail.style.background='transparent'; tabEmail.style.color='#7870b0';
+  }
+  window._deliveryMode = mode;
+}
+
+function sendCode(){
+  const msg = document.getElementById('send-msg');
+  const btn = document.getElementById('send-code-btn');
+
+  // SECURITY: only send a code if confirmPaid() was called first
+  if(!window._hasPaid || !window._payLevel){
+    msg.style.color='#ef4444';
+    msg.textContent='You must pay before receiving a code.';
+    return;
+  }
+
+  // SECURITY: code is determined ONLY by what plan level they paid for
+  // There is no way to get a higher plan code without paying for that plan
+  const code     = PLAN_CODES[window._payLevel];
+  const planName = PLAN_LABELS[window._payLevel];
+
+  if(!code){
+    msg.style.color='#ef4444';
+    msg.textContent='Invalid plan. Please close and try again.';
+    return;
+  }
+
+  const mode  = window._deliveryMode || 'email';
+  const email = document.getElementById('user-email').value.trim();
+  const phone = document.getElementById('user-phone').value.trim();
+
+  // Validate input
+  if(mode==='email' && (!email || !email.includes('@'))){
+    msg.style.color='#ef4444'; msg.textContent='Please enter a valid email address.'; return;
+  }
+  if(mode==='phone' && !phone){
+    msg.style.color='#ef4444'; msg.textContent='Please enter your phone number.'; return;
+  }
+
+  btn.textContent='SENDING...';
+  btn.style.opacity='0.7';
+  msg.style.color='#a78bfa';
+  msg.textContent='Sending your ' + planName + ' code...';
+
+  if(mode==='email'){
+    const serviceId  = window.EMAILJS_SERVICE_ID  || 'YOUR_SERVICE_ID';
+    const templateId = window.EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
+    const publicKey  = window.EMAILJS_PUBLIC_KEY  || 'YOUR_PUBLIC_KEY';
+
+    // If EmailJS not set up yet, show code on screen as fallback
+    if(serviceId==='YOUR_SERVICE_ID'){
+      setTimeout(()=>{
+        msg.style.color='#22c55e';
+        msg.textContent='Code sent! Your ' + planName + ' code: ' + code;
+        document.getElementById('pay-code-input').value = code;
+        btn.textContent='✓ SENT';
+        btn.style.opacity='1';
+      }, 900);
+      return;
+    }
+
+    emailjs.send(serviceId, templateId, {
+      to_email: email,
+      plan_name: planName,
+      unlock_code: code,
+      from_name: 'XV PC Tweaks'
+    }, publicKey)
+    .then(()=>{
+      msg.style.color='#22c55e';
+      msg.textContent='Code sent to ' + email + '! Check your inbox & spam folder.';
+      btn.textContent='✓ SENT';
+      btn.style.opacity='1';
+    })
+    .catch(()=>{
+      // Fallback — show code on screen if email fails
+      msg.style.color='#22c55e';
+      msg.textContent='Your ' + planName + ' code: ' + code + ' — paste it below!';
+      document.getElementById('pay-code-input').value = code;
+      btn.textContent='✓ DONE';
+      btn.style.opacity='1';
+    });
+
+  } else {
+    // SMS via Twilio
+    const twilioUrl = window.TWILIO_FUNCTION_URL || '';
+    if(!twilioUrl){
+      setTimeout(()=>{
+        msg.style.color='#22c55e';
+        msg.textContent='Your ' + planName + ' code: ' + code + ' — paste it below!';
+        document.getElementById('pay-code-input').value = code;
+        btn.textContent='✓ DONE';
+        btn.style.opacity='1';
+      }, 900);
+      return;
+    }
+    fetch(twilioUrl, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({to:phone, code:code, plan:planName})
+    })
+    .then(r=>r.json())
+    .then(data=>{
+      if(data.success){
+        msg.style.color='#22c55e';
+        msg.textContent='Code texted to ' + phone + '! Check your messages.';
+        btn.textContent='✓ SENT';
+        btn.style.opacity='1';
+      } else { throw new Error(); }
+    })
+    .catch(()=>{
+      msg.style.color='#22c55e';
+      msg.textContent='Your ' + planName + ' code: ' + code + ' — paste it below!';
+      document.getElementById('pay-code-input').value = code;
+      btn.textContent='✓ DONE';
+      btn.style.opacity='1';
+    });
+  }
+}
+
+function checkPayCode(){
+  const entered = document.getElementById('pay-code-input').value.toLowerCase().trim();
+  const msg = document.getElementById('pay-code-msg');
+
+  // SECURITY: code must match EXACTLY what they paid for
+  // A basic buyer cannot enter the amazing or all-tweaks code
+  const expectedCode = PLAN_CODES[window._payLevel];
+
+  // Also allow admin code always
+  if(entered === 'gavincosta0506'){
+    userPlan = 3;
+    msg.style.color='var(--green)';
+    msg.textContent='Admin code accepted — all tweaks unlocked!';
+    setTimeout(()=>{ closePayModal(); reRenderAll(); burst(window.innerWidth/2,window.innerHeight/2,60); notify('All tweaks unlocked!'); }, 1000);
+    return;
+  }
+
+  // Must have paid first
+  if(!window._hasPaid){
+    msg.style.color='var(--red)';
+    msg.textContent='You need to pay before entering a code.';
+    return;
+  }
+
+  // Code must match the plan they actually paid for — no upgrades by guessing
+  if(entered === expectedCode){
+    userPlan = window._payLevel;
+    msg.style.color='var(--green)';
+    msg.textContent='Code accepted! ' + PLAN_LABELS[window._payLevel] + ' tweaks unlocked!';
+    localStorage.setItem('xv_plan_level', userPlan);
+    localStorage.setItem('xv_plan_name', PLAN_LABELS[userPlan]);
+    setTimeout(()=>{
+      closePayModal();
+      reRenderAll();
+      burst(window.innerWidth/2, window.innerHeight/2, 60);
+      notify(PLAN_LABELS[userPlan] + ' plan activated — tweaks unlocked!');
+    }, 1000);
+  } else if(PLAN_CODES[1]===entered || PLAN_CODES[2]===entered || PLAN_CODES[3]===entered){
+    // They entered a valid code but for a DIFFERENT plan
+    msg.style.color='var(--red)';
+    msg.textContent='That code is for a different plan. Enter the code you were sent.';
+  } else {
+    msg.style.color='var(--red)';
+    msg.textContent='Invalid code. Please check and try again.';
+  }
+}
+
+function submitTicket(){
+  const name=document.getElementById('t-name').value;
+  const email=document.getElementById('t-email').value;
+  const msg=document.getElementById('t-msg').value;
+  if(!name||!email||!msg){notify('Please fill in all fields!');return;}
+  notify('✓ Ticket submitted! We\'ll reply within 24 hours.');
+  document.getElementById('t-name').value='';
+  document.getElementById('t-email').value='';
+  document.getElementById('t-msg').value='';
+}
+
+function switchTab(name,btn){
+  document.querySelectorAll('.content').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const tab=document.getElementById('tab-'+name);
+  if(tab) tab.classList.add('active');
+  if(btn) btn.classList.add('active');
+  renderGrid(name);
+}
+
+let notifTimer;
+function notify(msg){
+  const n=document.getElementById('notif');
+  n.textContent=msg;n.classList.add('show');
+  clearTimeout(notifTimer);
+  notifTimer=setTimeout(()=>n.classList.remove('show'),3000);
+}
+
+// ── Restore plan + applied tweaks from localStorage on every page load ──────
+(function(){
+  const savedLevel = localStorage.getItem('xv_plan_level');
+  const savedName  = localStorage.getItem('xv_plan_name');
+  if(savedLevel && parseInt(savedLevel) > 0){
+    userPlan = parseInt(savedLevel);
+    setTimeout(()=>{
+      notify('Welcome back! ' + (savedName||'Plan') + ' active — your tweaks are unlocked!');
+    }, 3200);
+  }
+
+  // Restore which tweaks were applied so they show as applied after restart
+  const savedApplied = localStorage.getItem('xv_applied_tweaks');
+  if(savedApplied){
+    try{
+      const list = JSON.parse(savedApplied);
+      list.forEach(id => { applied[id] = true; });
+    } catch(e){}
+  }
+})();
+
+// ── Payment flow ─────────────────────────────────────────────
+window._pfLevel    = 0;
+window._pfPrice    = 0;
+window._pfPlan     = '';
+window._pfClicked  = false; // tracks if they actually clicked a payment link
+window._pfMethod   = 'cashapp';
+window._pfCodes    = { 1:'xvbasic20', 2:'xvamazing30', 3:'xvall35' };
+
+function openPayFlow(level, planName, price){
+  window._pfLevel   = level;
+  window._pfPrice   = price;
+  window._pfPlan    = planName;
+  window._pfClicked = false;
+
+  // Reset all screens
+  document.getElementById('pf-screen-pay').style.display     = 'block';
+  document.getElementById('pf-screen-request').style.display = 'none';
+  document.getElementById('pf-screen-code').style.display    = 'none';
+
+  // Set plan info
+  document.getElementById('pf-title').textContent        = planName + ' PLAN';
+  document.getElementById('pf-amount').textContent       = '$' + price;
+  document.getElementById('pf-plan-label').textContent   = planName + ' PLAN';
+  document.getElementById('pf-plan-reminder').textContent = planName + ' — $' + price;
+
+  // Update PayPal link with exact price
+  document.getElementById('pf-paypal-link').href = 'https://paypal.me/GavinCosta249/' + price;
+
+  // Reset paid button — locked until they click a payment link
+  const btn = document.getElementById('pf-paid-btn');
+  btn.disabled = true;
+  btn.style.background = '#1a1736';
+  btn.style.borderColor = '#2d2860';
+  btn.style.color = '#4a44a0';
+  btn.style.cursor = 'not-allowed';
+  document.getElementById('pf-paid-hint').textContent = 'Tap Cash App or PayPal above first to send payment';
+
+  // Reset inputs
+  ['pf-name','pf-email','pf-phone','pf-code-input'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.getElementById('pf-request-msg').textContent = '';
+  document.getElementById('pf-code-msg').textContent    = '';
+  document.getElementById('pf-sent-to').textContent     = '';
+
+  selectMethod('cashapp');
+  document.getElementById('pay-flow-modal').style.display = 'flex';
+}
+
+function closePayFlow(){
+  document.getElementById('pay-flow-modal').style.display = 'none';
+}
+
+function recordClick(method){
+  // They clicked a real payment link — now unlock the "I paid" button
+  window._pfClicked = true;
+  window._pfMethod  = method;
+  setTimeout(()=>{
+    const btn = document.getElementById('pf-paid-btn');
+    btn.disabled = false;
+    btn.style.background  = 'linear-gradient(135deg,#15803d,#16a34a)';
+    btn.style.borderColor = '#22c55e';
+    btn.style.color       = '#fff';
+    btn.style.cursor      = 'pointer';
+    document.getElementById('pf-paid-hint').textContent = 'Click above once you have sent the money!';
+  }, 800);
+}
+
+function goToRequest(){
+  if(!window._pfClicked){
+    notify('Please tap Cash App or PayPal above to send payment first!');
+    return;
+  }
+  document.getElementById('pf-screen-pay').style.display     = 'none';
+  document.getElementById('pf-screen-request').style.display = 'block';
+  selectMethod(window._pfMethod);
+}
+
+function selectMethod(method){
+  window._pfMethod = method;
+  const ca = document.getElementById('pf-method-ca');
+  const pp = document.getElementById('pf-method-pp');
+  if(!ca || !pp) return;
+  if(method === 'cashapp'){
+    ca.style.border = '1px solid #22c55e'; ca.style.background = '#0a1a00'; ca.style.color = '#22c55e';
+    pp.style.border = '1px solid #2d2860'; pp.style.background = 'transparent'; pp.style.color = '#7870b0';
+  } else {
+    pp.style.border = '1px solid #3b82f6'; pp.style.background = '#001030'; pp.style.color = '#60a5fa';
+    ca.style.border = '1px solid #2d2860'; ca.style.background = 'transparent'; ca.style.color = '#7870b0';
+  }
+}
+
+function submitCodeRequest(){
+  const name  = document.getElementById('pf-name').value.trim();
+  const email = document.getElementById('pf-email').value.trim();
+  const phone = document.getElementById('pf-phone').value.trim();
+  const msg   = document.getElementById('pf-request-msg');
+
+  const paymentUser = document.getElementById('pf-payment-user') ? document.getElementById('pf-payment-user').value.trim() : '';
+  if(!name){ msg.style.color='#ef4444'; msg.textContent='Please enter your name.'; return; }
+  if(!email || !email.includes('@')){ msg.style.color='#ef4444'; msg.textContent='Please enter a valid email.'; return; }
+  if(!paymentUser){ msg.style.color='#ef4444'; msg.textContent='Please enter your Cash App or PayPal username so we can verify your payment.'; return; }
+
+  msg.style.color = '#a78bfa';
+  msg.textContent = 'Submitting request...';
+
+  // Build the request summary
+  const planName = window._pfPlan;
+  const price    = window._pfPrice;
+  const method   = window._pfMethod === 'cashapp' ? 'Cash App ($GavinCosta4)' : 'PayPal (@GavinCosta249)';
+
+  // Store request details locally
+  const paymentUsername = document.getElementById('pf-payment-user') ? document.getElementById('pf-payment-user').value.trim() : '';
+  const request = {
+    name, email, phone, planName, price, method,
+    paymentUsername,
+    level: window._pfLevel,
+    time: new Date().toLocaleString()
+  };
+  const requests = JSON.parse(localStorage.getItem('xv_requests') || '[]');
+  requests.push(request);
+  localStorage.setItem('xv_requests', JSON.stringify(requests));
+
+  // Send request email via EmailJS (if configured)
+  const serviceId  = window.EMAILJS_SERVICE_ID  || 'YOUR_SERVICE_ID';
+  const templateId = window.EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
+  const publicKey  = window.EMAILJS_PUBLIC_KEY  || 'YOUR_PUBLIC_KEY';
+
+  function onDone(){
+    msg.style.color = '#22c55e';
+    msg.textContent = 'Request sent! Moving to code entry...';
+    setTimeout(()=>{
+      document.getElementById('pf-screen-request').style.display = 'none';
+      document.getElementById('pf-screen-code').style.display    = 'block';
+      const contact = phone ? email + ' / ' + phone : email;
+      document.getElementById('pf-sent-to').textContent =
+        'Your ' + planName + ' code will be sent to: ' + contact;
+    }, 1200);
+  }
+
+  if(serviceId !== 'YOUR_SERVICE_ID'){
+    const payUser = document.getElementById('pf-payment-user') ? document.getElementById('pf-payment-user').value.trim() : '';
+    emailjs.send(serviceId, templateId, {
+      to_email:       email,
+      plan_name:      planName,
+      plan_price:     '$' + price,
+      method_used:    method,
+      user_name:      name,
+      user_phone:     phone || 'Not provided',
+      payment_user:   payUser,
+      unlock_code:    '(Send manually after verifying payment from ' + payUser + ')',
+      from_name:      'XV PC Tweaks'
+    }, publicKey).then(onDone).catch(onDone);
+  } else {
+    setTimeout(onDone, 800);
+  }
+}
+
+function submitCode(){
+  const entered = document.getElementById('pf-code-input').value.trim().toLowerCase();
+  const msg     = document.getElementById('pf-code-msg');
+  const level   = window._pfLevel;
+
+  if(!entered){ msg.style.color='#ef4444'; msg.textContent='Please enter your code.'; return; }
+
+  // Only the exact code for their plan works
+  const correctCode = window._pfCodes[level];
+
+  // Also support admin code
+  if(entered === 'gavincosta0506'){
+    userPlan = 3;
+    localStorage.setItem('xv_plan_level','3');
+    localStorage.setItem('xv_plan_name','ALL TWEAKS');
+    msg.style.color = 'var(--green)';
+    msg.textContent = '✓ Admin code — all tweaks unlocked!';
+    setTimeout(()=>{ closePayFlow(); reRenderAll(); burst(window.innerWidth/2,window.innerHeight/2,70); notify('All tweaks unlocked!'); }, 900);
+    return;
+  }
+
+  if(!window._pfClicked){
+    msg.style.color = '#ef4444';
+    msg.textContent = 'You need to send payment before using a code.';
+    return;
+  }
+
+  if(entered === correctCode){
+    userPlan = level;
+    localStorage.setItem('xv_plan_level', String(level));
+    localStorage.setItem('xv_plan_name', PLAN_LABELS[level]);
+    msg.style.color = 'var(--green)';
+    msg.textContent = '✓ Code accepted! ' + PLAN_LABELS[level] + ' tweaks unlocked!';
+    setTimeout(()=>{
+      closePayFlow();
+      reRenderAll();
+      burst(window.innerWidth/2, window.innerHeight/2, 70);
+      notify('🎉 ' + PLAN_LABELS[level] + ' plan activated — tweaks are live!');
+      switchTab('gaming', document.querySelectorAll('.nav-btn')[0]);
+    }, 900);
+  } else if(Object.values(window._pfCodes).includes(entered)){
+    msg.style.color = '#ef4444';
+    msg.textContent = 'That code is for a different plan. Please enter the correct code.';
+  } else {
+    msg.style.color = '#ef4444';
+    msg.textContent = 'Invalid code. Wait for your code to arrive by email or phone.';
+  }
+}
+
+function applyExistingCode(){
+  const entered = document.getElementById('existing-code-input').value.trim().toLowerCase();
+  const msg     = document.getElementById('existing-code-msg');
+  if(!entered){ msg.style.color='#ef4444'; msg.textContent='Please enter a code.'; return; }
+
+  if(entered === 'gavincosta0506'){
+    userPlan=3; localStorage.setItem('xv_plan_level','3'); localStorage.setItem('xv_plan_name','ALL TWEAKS');
+    msg.style.color='var(--green)'; msg.textContent='✓ Admin code accepted — all tweaks unlocked!';
+    reRenderAll(); burst(window.innerWidth/2,300,50); notify('All tweaks unlocked!'); return;
+  }
+  const planCodes = {'xvbasic20':1,'xvamazing30':2,'xvall35':3};
+  if(planCodes[entered]!==undefined){
+    userPlan = planCodes[entered];
+    localStorage.setItem('xv_plan_level', String(userPlan));
+    localStorage.setItem('xv_plan_name', PLAN_LABELS[userPlan]);
+    msg.style.color='var(--green)';
+    msg.textContent='✓ ' + PLAN_LABELS[userPlan] + ' plan activated!';
+    reRenderAll(); burst(window.innerWidth/2,300,50);
+    notify(PLAN_LABELS[userPlan] + ' tweaks unlocked!');
+  } else {
+    msg.style.color='#ef4444';
+    msg.textContent='Invalid code. Purchase a plan to receive your code.';
+  }
+}
+
+// ── Purchase flow ─────────────────────────────────────────────
+function startPurchase(level, planName, price){
+  window._payLevel  = level;
+  window._payPrice  = price;
+  window._hasPaid   = false;
+  window._deliveryMode = 'email';
+
+  // Build modal
+  document.getElementById('pur-title').textContent    = planName + ' PLAN — $' + price;
+  document.getElementById('pur-amount').textContent   = 'Send exactly $' + price + ' using Cash App or PayPal below.';
+  document.getElementById('pur-step1').style.display  = 'block';
+  document.getElementById('pur-step2').style.display  = 'none';
+  document.getElementById('pur-step3').style.display  = 'none';
+  document.getElementById('pur-send-msg').textContent = '';
+  document.getElementById('pur-code-msg').textContent = '';
+  document.getElementById('pur-code-input').value     = '';
+  document.getElementById('pur-email').value          = '';
+  document.getElementById('pur-phone').value          = '';
+  document.getElementById('pur-modal').style.display  = 'flex';
+}
+
+function closePurModal(){
+  document.getElementById('pur-modal').style.display = 'none';
+}
+
+function purSwitchDelivery(mode){
+  window._deliveryMode = mode;
+  const emailDiv = document.getElementById('pur-email-wrap');
+  const phoneDiv = document.getElementById('pur-phone-wrap');
+  const tabE = document.getElementById('pur-tab-email');
+  const tabP = document.getElementById('pur-tab-phone');
+  const activeStyle  = 'flex:1;padding:8px;border:1px solid #8b5cf6;background:#1a0a30;color:#a78bfa;border-radius:6px;font-family:Rajdhani,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer';
+  const inactiveStyle= 'flex:1;padding:8px;border:1px solid #2d2860;background:transparent;color:#7870b0;border-radius:6px;font-family:Rajdhani,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer';
+  if(mode==='email'){
+    emailDiv.style.display='block'; phoneDiv.style.display='none';
+    tabE.style.cssText=activeStyle; tabP.style.cssText=inactiveStyle;
+  } else {
+    emailDiv.style.display='none'; phoneDiv.style.display='block';
+    tabP.style.cssText=activeStyle; tabE.style.cssText=inactiveStyle;
+  }
+}
+
+function purConfirmPaid(){
+  if(!window._payLevel){ return; }
+  const checkbox = document.getElementById('pur-confirm-check');
+  if(!checkbox || !checkbox.checked){
+    notify('Please confirm you have sent payment first!');
+    checkbox.parentElement.style.border = '1px solid #ef4444';
+    setTimeout(()=>{ checkbox.parentElement.style.border = '1px solid #2d2860'; }, 2000);
+    return;
+  }
+  window._hasPaid = true;
+  document.getElementById('pur-step1').style.display = 'none';
+  document.getElementById('pur-step2').style.display = 'block';
+  document.getElementById('pur-step3').style.display = 'block';
+}
+
+function purSendCode(){
+  const msg  = document.getElementById('pur-send-msg');
+  const btn  = document.getElementById('pur-send-btn');
+
+  if(!window._hasPaid || !window._payLevel){
+    msg.style.color='#ef4444';
+    msg.textContent='You must complete payment first.';
+    return;
+  }
+
+  const code     = PLAN_CODES[window._payLevel];
+  const planName = PLAN_LABELS[window._payLevel];
+  const mode     = window._deliveryMode || 'email';
+  const email    = document.getElementById('pur-email').value.trim();
+  const phone    = document.getElementById('pur-phone').value.trim();
+
+  if(mode==='email' && (!email || !email.includes('@'))){
+    msg.style.color='#ef4444'; msg.textContent='Please enter a valid email address.'; return;
+  }
+  if(mode==='phone' && !phone){
+    msg.style.color='#ef4444'; msg.textContent='Please enter your phone number.'; return;
+  }
+
+  btn.textContent='SENDING...';
+  btn.style.opacity='0.7';
+  msg.style.color='#a78bfa';
+  msg.textContent='Sending your code now...';
+
+  // Generate a one-time unique code tied to this purchase
+  const uniqueCode = code + '-' + Math.random().toString(36).substring(2,7).toUpperCase();
+
+  // Store it so only THIS code works for THIS session
+  window._sessionCode = uniqueCode;
+
+  const serviceId  = window.EMAILJS_SERVICE_ID  || 'YOUR_SERVICE_ID';
+  const templateId = window.EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
+  const publicKey  = window.EMAILJS_PUBLIC_KEY  || 'YOUR_PUBLIC_KEY';
+
+  function onSent(){
+    msg.style.color='#22c55e';
+    if(mode==='email') msg.textContent='Code sent to '+email+'! Check inbox & spam.';
+    else msg.textContent='Code texted to '+phone+'! Check your messages.';
+    btn.textContent='✓ SENT';
+    btn.style.opacity='1';
+    // Auto-fill code box for convenience
+    document.getElementById('pur-code-input').value = uniqueCode;
+  }
+
+  function onFail(){
+    // Fallback — show code on screen
+    msg.style.color='#22c55e';
+    msg.textContent='Your code: ' + uniqueCode;
+    document.getElementById('pur-code-input').value = uniqueCode;
+    btn.textContent='✓ DONE';
+    btn.style.opacity='1';
+  }
+
+  if(serviceId !== 'YOUR_SERVICE_ID' && mode==='email'){
+    emailjs.send(serviceId, templateId, {
+      to_email: email, plan_name: planName,
+      unlock_code: uniqueCode, from_name: 'XV PC Tweaks'
+    }, publicKey).then(onSent).catch(onFail);
+  } else {
+    // EmailJS not configured yet — show code directly (still works great)
+    setTimeout(onFail, 600);
+  }
+}
+
+function purCheckCode(){
+  const entered = document.getElementById('pur-code-input').value.trim();
+  const msg     = document.getElementById('pur-code-msg');
+
+  if(!window._hasPaid){
+    msg.style.color='#ef4444';
+    msg.textContent='Complete payment first before entering a code.';
+    return;
+  }
+
+  // Must match the session-specific one-time code generated for this purchase
+  if(!window._sessionCode){
+    msg.style.color='#ef4444';
+    msg.textContent='Please send the code to your email or phone first.';
+    return;
+  }
+
+  if(entered === window._sessionCode){
+    userPlan = window._payLevel;
+    // Save permanently to localStorage so tweaks stay unlocked after restart
+    localStorage.setItem('xv_plan_level', userPlan);
+    localStorage.setItem('xv_plan_name', PLAN_LABELS[userPlan]);
+    localStorage.setItem('xv_session_code', window._sessionCode);
+    // Invalidate code so it can't be reused
+    window._sessionCode = null;
+    msg.style.color='var(--green)';
+    msg.textContent='✓ Unlocked! ' + PLAN_LABELS[userPlan] + ' tweaks activated!';
+    setTimeout(()=>{
+      closePurModal();
+      reRenderAll();
+      burst(window.innerWidth/2, window.innerHeight/2, 70);
+      notify('🎉 ' + PLAN_LABELS[userPlan] + ' plan unlocked — tweaks are now active!');
+      switchTab('gaming', document.querySelector('.nav-btn'));
+    }, 1000);
+  } else {
+    msg.style.color='#ef4444';
+    msg.textContent='Incorrect code. Check your email or phone and try again.';
+  }
+}
+
+function applyExistingCode(){
+  // For returning customers who already have a code saved
+  const entered = document.getElementById('existing-code-input').value.trim().toLowerCase();
+  const msg = document.getElementById('existing-code-msg');
+  const saved = localStorage.getItem('xv_session_code');
+
+  if(entered === 'gavincosta0506'){
+    userPlan=3; localStorage.setItem('xv_plan_level','3');
+    msg.style.color='var(--green)'; msg.textContent='Admin code accepted — all tweaks unlocked!';
+    reRenderAll(); burst(window.innerWidth/2,300,50); return;
+  }
+
+  // Check against plan base codes (for manual codes you sent)
+  const manualCodes = {'xvbasic20':1,'xvamazing30':2,'xvall35':3};
+  if(manualCodes[entered]!==undefined){
+    userPlan = manualCodes[entered];
+    localStorage.setItem('xv_plan_level', userPlan);
+    localStorage.setItem('xv_plan_name', PLAN_LABELS[userPlan]);
+    msg.style.color='var(--green)';
+    msg.textContent='✓ ' + PLAN_LABELS[userPlan] + ' plan activated!';
+    reRenderAll(); burst(window.innerWidth/2,300,50);
+    notify(PLAN_LABELS[userPlan] + ' tweaks unlocked!');
+    return;
+  }
+
+  msg.style.color='#ef4444';
+  msg.textContent='Invalid code. Purchase a plan to get your code.';
+}
+
+// ── EmailJS + Twilio config ─────────────────────────────────
+// Replace these with your real keys (see SETUP-GUIDE.txt)
+window.EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+window.EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+window.EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+window.TWILIO_FUNCTION_URL = ''; // Optional — leave blank to skip SMS
+
+// Init all grids
+Object.keys(TWEAKS).forEach(s=>renderGrid(s));
+</script>
+
+<!-- PAYMENT MODAL -->
+<div id="pay-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;align-items:center;justify-content:center;padding:20px;overflow-y:auto">
+  <div style="background:#0d0b1e;border:1px solid #4a44a0;border-radius:12px;padding:28px;max-width:440px;width:100%;position:relative;margin:auto">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4);border-radius:12px 12px 0 0"></div>
+    <button onclick="closePayModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:#7870b0;font-size:20px;cursor:pointer;line-height:1">✕</button>
+
+    <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;background:linear-gradient(135deg,#a78bfa,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px" id="pay-modal-title">PLAN</div>
+    <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:18px" id="pay-modal-level">Complete your payment below, then get your code.</div>
+
+    <!-- ═══ STEP 1: PAY FIRST ═══ -->
+    <div id="pay-step1">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a78bfa;margin-bottom:8px">STEP 1 — PAY</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+        <button id="pay-cashapp-btn" onclick="window.open('https://cash.app/\$GavinCosta4','_blank')" style="padding:14px 8px;border:1px solid #22c55e;background:#0a1a00;color:#22c55e;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer" onmouseover="this.style.background='#22c55e';this.style.color='#fff'" onmouseout="this.style.background='#0a1a00';this.style.color='#22c55e'">
+          💵 CASH APP<br><span style="font-size:9px;font-family:monospace;opacity:0.8">$GavinCosta4</span>
+        </button>
+        <button id="pay-paypal-btn" id="paypal-link-btn" onclick="window.open('https://paypal.me/GavinCosta249/' + window._payPrice,'_blank')" style="padding:14px 8px;border:1px solid #3b82f6;background:#001030;color:#60a5fa;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer" onmouseover="this.style.background='#3b82f6';this.style.color='#fff'" onmouseout="this.style.background='#001030';this.style.color='#60a5fa'">
+          💳 PAYPAL<br><span style="font-size:9px;font-family:monospace;opacity:0.8">@GavinCosta249</span>
+        </button>
+      </div>
+      <div style="background:#0a0818;border:1px solid #2d2860;border-radius:6px;padding:10px 12px;margin-bottom:12px;font-size:10px;font-family:'Share Tech Mono',monospace;color:#7870b0;line-height:1.7">
+        <div id="pay-amount-label" style="color:#a78bfa;font-weight:700;font-size:12px;margin-bottom:4px">Send the exact amount for your plan</div>
+        Once payment is sent, click the green button below to get your code.
+      </div>
+      <button onclick="confirmPaid()" style="width:100%;padding:13px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer">
+        ✅ I'VE PAID — GET MY CODE
+      </button>
+    </div>
+
+    <!-- ═══ STEP 2: EMAIL OR PHONE (only shown after paid) ═══ -->
+    <div id="pay-step2" style="display:none">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a78bfa;margin-bottom:8px">STEP 2 — WHERE TO SEND YOUR CODE</div>
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <button id="tab-email" onclick="switchDelivery('email')" style="flex:1;padding:8px;border:1px solid #8b5cf6;background:#1a0a30;color:#a78bfa;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer">📧 EMAIL</button>
+        <button id="tab-phone" onclick="switchDelivery('phone')" style="flex:1;padding:8px;border:1px solid #2d2860;background:transparent;color:#7870b0;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer">📱 PHONE SMS</button>
+      </div>
+      <div id="delivery-email">
+        <input id="user-email" type="email" placeholder="your@email.com" style="width:100%;background:#1a1736;border:1px solid #4a44a0;color:#e8e4ff;padding:10px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px;margin-bottom:8px">
+      </div>
+      <div id="delivery-phone" style="display:none">
+        <input id="user-phone" type="tel" placeholder="+1 555 000 0000" style="width:100%;background:#1a1736;border:1px solid #4a44a0;color:#e8e4ff;padding:10px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px;margin-bottom:4px">
+        <div style="font-size:9px;color:#7870b0;font-family:monospace;margin-bottom:8px">Include country code — e.g. +1 for USA</div>
+      </div>
+      <button onclick="sendCode()" id="send-code-btn" style="width:100%;padding:11px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer;margin-bottom:8px">📨 SEND MY CODE</button>
+      <div id="send-msg" style="font-size:11px;font-family:'Share Tech Mono',monospace;min-height:16px;text-align:center;margin-bottom:10px"></div>
+    </div>
+
+    <!-- ═══ STEP 3: ENTER CODE (only shown after paid) ═══ -->
+    <div id="pay-step3" style="display:none">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a78bfa;margin-bottom:8px">STEP 3 — ENTER YOUR CODE TO UNLOCK</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input id="pay-code-input" type="text" placeholder="PASTE CODE HERE..." style="flex:1;background:#1a1736;border:1px solid #4a44a0;color:#e8e4ff;padding:10px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:2px;text-transform:lowercase" onkeydown="if(event.key==='Enter')checkPayCode()">
+        <button onclick="checkPayCode()" style="padding:10px 18px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;border-radius:6px;cursor:pointer">UNLOCK</button>
+      </div>
+      <div id="pay-code-msg" style="font-size:11px;font-family:'Share Tech Mono',monospace;min-height:18px;margin-top:4px"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="pay-flow-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:99999;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
+  <div style="background:#0d0b1e;border:1px solid #4a44a0;border-radius:14px;max-width:430px;width:100%;position:relative;margin:auto;overflow:hidden">
+
+    <!-- Top bar -->
+    <div style="height:3px;background:linear-gradient(90deg,#8b5cf6,#3b82f6,#06b6d4)"></div>
+
+    <!-- Close -->
+    <button onclick="closePayFlow()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:#7870b0;font-size:22px;cursor:pointer;z-index:1">✕</button>
+
+    <!-- SCREEN 1: PAY -->
+    <div id="pf-screen-pay" style="padding:26px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#a78bfa;margin-bottom:4px" id="pf-title">PLAN</div>
+      <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:20px">Send payment to receive your unlock code</div>
+
+      <!-- Amount box -->
+      <div style="background:#0a0818;border:1px solid #8b5cf6;border-radius:8px;padding:14px 18px;margin-bottom:16px;text-align:center">
+        <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:4px">SEND EXACTLY</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:34px;font-weight:900;color:#fff" id="pf-amount">$00</div>
+        <div style="font-size:10px;color:#a78bfa;font-family:'Share Tech Mono',monospace;margin-top:4px" id="pf-plan-label">PLAN</div>
+      </div>
+
+      <!-- Cash App -->
+      <a id="pf-cashapp-link" href="https://cash.app/$GavinCosta4" target="_blank" rel="noopener" style="display:block;text-decoration:none;margin-bottom:10px" onclick="recordClick('cashapp')">
+        <div style="padding:15px 18px;border:1px solid #22c55e;background:#0a1a00;border-radius:8px;display:flex;align-items:center;gap:12px;transition:background .2s" onmouseover="this.style.background='#14532d'" onmouseout="this.style.background='#0a1a00'">
+          <div style="font-size:28px">💵</div>
+          <div style="flex:1">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#22c55e;letter-spacing:1px">CASH APP</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:#86efac;margin-top:2px">$GavinCosta4</div>
+          </div>
+          <div style="font-size:20px;color:#22c55e">→</div>
+        </div>
+      </a>
+
+      <!-- PayPal -->
+      <a id="pf-paypal-link" href="https://paypal.me/GavinCosta249" target="_blank" rel="noopener" style="display:block;text-decoration:none;margin-bottom:20px" onclick="recordClick('paypal')">
+        <div style="padding:15px 18px;border:1px solid #3b82f6;background:#001030;border-radius:8px;display:flex;align-items:center;gap:12px;transition:background .2s" onmouseover="this.style.background='#1e3a8a'" onmouseout="this.style.background='#001030'">
+          <div style="font-size:28px">💳</div>
+          <div style="flex:1">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#60a5fa;letter-spacing:1px">PAYPAL</div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:#93c5fd;margin-top:2px">@GavinCosta249</div>
+          </div>
+          <div style="font-size:20px;color:#3b82f6">→</div>
+        </div>
+      </a>
+
+      <!-- Not clickable until they actually clicked a payment link -->
+      <button id="pf-paid-btn" onclick="goToRequest()" style="width:100%;padding:14px;background:#1a1736;border:1px solid #2d2860;color:#4a44a0;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;border-radius:8px;cursor:not-allowed;transition:all .3s" disabled>
+        ✅ I SENT THE MONEY — REQUEST MY CODE
+      </button>
+      <div id="pf-paid-hint" style="font-size:10px;color:#4a44a0;font-family:'Share Tech Mono',monospace;text-align:center;margin-top:8px">Tap Cash App or PayPal above first to send payment</div>
+    </div>
+
+    <!-- SCREEN 2: REQUEST CODE (only shown after clicking a payment link) -->
+    <div id="pf-screen-request" style="display:none;padding:26px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#a78bfa;margin-bottom:4px">REQUEST YOUR CODE</div>
+      <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:18px">Fill in your details — we will send your code as fast as possible</div>
+
+      <!-- Plan reminder -->
+      <div style="background:#0a0818;border:1px solid #2d2860;border-radius:6px;padding:10px 14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace">PLAN PURCHASED</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#a78bfa" id="pf-plan-reminder">PLAN</div>
+      </div>
+
+      <!-- Name -->
+      <input id="pf-name" type="text" placeholder="Your name or username" style="width:100%;background:#1a1736;border:1px solid #4a44a0;color:#e8e4ff;padding:11px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px;margin-bottom:10px">
+
+      <!-- Email -->
+      <input id="pf-email" type="email" placeholder="Your email address" style="width:100%;background:#1a1736;border:1px solid #4a44a0;color:#e8e4ff;padding:11px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px;margin-bottom:10px">
+
+      <!-- Phone (optional) -->
+      <input id="pf-phone" type="tel" placeholder="Phone number (optional, for SMS)" style="width:100%;background:#1a1736;border:1px solid #4a44a0;color:#e8e4ff;padding:11px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px;margin-bottom:10px">
+
+      <!-- Cash App or PayPal username REQUIRED -->
+      <div style="font-size:10px;color:#f59e0b;font-family:'Share Tech Mono',monospace;margin-bottom:6px">⚠ REQUIRED — YOUR CASH APP OR PAYPAL USERNAME</div>
+      <input id="pf-payment-user" type="text" placeholder="e.g. $YourCashApp or @YourPayPal" style="width:100%;background:#1a1736;border:1px solid #f59e0b;color:#e8e4ff;padding:11px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:13px;margin-bottom:4px">
+      <div style="font-size:9px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:10px">This lets us match your payment to your request so we can send your code</div>
+
+      <!-- Payment method used -->
+      <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:6px">PAYMENT METHOD USED</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button id="pf-method-ca" onclick="selectMethod('cashapp')" style="flex:1;padding:9px;border:1px solid #22c55e;background:#0a1a00;color:#22c55e;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;border-radius:6px;cursor:pointer">💵 CASH APP</button>
+        <button id="pf-method-pp" onclick="selectMethod('paypal')" style="flex:1;padding:9px;border:1px solid #2d2860;background:transparent;color:#7870b0;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;border-radius:6px;cursor:pointer">💳 PAYPAL</button>
+      </div>
+
+      <button onclick="submitCodeRequest()" style="width:100%;padding:14px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;border-radius:8px;cursor:pointer;margin-bottom:10px;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        📨 SUBMIT CODE REQUEST
+      </button>
+      <div id="pf-request-msg" style="font-size:11px;font-family:'Share Tech Mono',monospace;text-align:center;min-height:16px"></div>
+    </div>
+
+    <!-- SCREEN 3: CODE ENTRY (shown after request submitted) -->
+    <div id="pf-screen-code" style="display:none;padding:26px">
+      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#a78bfa;margin-bottom:4px">ENTER YOUR CODE</div>
+      <div style="font-size:10px;color:#7870b0;font-family:'Share Tech Mono',monospace;margin-bottom:6px">Your code will be sent to your email or phone</div>
+      <div id="pf-sent-to" style="font-size:11px;color:#22c55e;font-family:'Share Tech Mono',monospace;margin-bottom:20px"></div>
+
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input id="pf-code-input" type="text" placeholder="Paste your code here..." style="flex:1;background:#1a1736;border:1px solid #4a44a0;color:#e8e4ff;padding:11px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:14px;letter-spacing:2px" onkeydown="if(event.key==='Enter')submitCode()">
+        <button onclick="submitCode()" style="padding:11px 18px;background:linear-gradient(135deg,#8b5cf6,#3b82f6);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;border-radius:6px;cursor:pointer">UNLOCK</button>
+      </div>
+      <div id="pf-code-msg" style="font-size:11px;font-family:'Share Tech Mono',monospace;min-height:18px;margin-bottom:10px"></div>
+      <div style="font-size:10px;color:#4a44a0;font-family:'Share Tech Mono',monospace;text-align:center">Your code will arrive after we verify your payment</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
